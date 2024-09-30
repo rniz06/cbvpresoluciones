@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Resolucion\Archivo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,5 +45,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relacion uno a muchos inversa con la tabla de resoluciones campo usuario_id
+     */
+    public function resoluciones()
+    {
+        return $this->hasMany(Resolucion::class);
+    }
+
+    /**
+     * Relacion uno a muchos inversa con la tabla de resolucion_archivos
+     * Un usuario puede tener agregar varios archivos
+     */
+    public function archivos()
+    {
+        return $this->hasMany(Archivo::class);
     }
 }
