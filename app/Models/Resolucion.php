@@ -18,7 +18,14 @@ class Resolucion extends Model
         'fecha',
         'ano',
         'usuario_id',
+        'ruta_archivo',
+        'nombre_original',
     ];
+
+    // protected $casts = [
+    //     'ruta_archivo',
+    //     'nombre_original',
+    // ];
 
     /**
      * Relacion uno a muchos con la tabla "users" a travez del campo "usuario_id"

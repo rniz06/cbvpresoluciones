@@ -17,6 +17,8 @@ return new class extends Migration
             $table->longText('concepto');
             $table->date('fecha')->nullable();
             $table->year('ano');
+            $table->text('ruta_archivo');
+            $table->text('nombre_original');
             $table->unsignedBigInteger('usuario_id')->nullable();
             $table->timestamps();
 
