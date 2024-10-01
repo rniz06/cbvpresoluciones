@@ -54,7 +54,7 @@ class ResolucionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('n_resolucion')->label('N° Resolución')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('concepto')->label('Concepto'),
+                Tables\Columns\TextColumn::make('concepto')->label('Concepto')->limit(50),
                 Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('ano')->label('Año')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(true),
@@ -63,12 +63,12 @@ class ResolucionResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Action::make('download')
-                // ->label('')
-                // ->icon('heroicon-o-download')
-                // ->url(fn (Resolucion $record): string => route('download.resolution', $record))
-                // ->openUrlInNewTab(),                
+                Tables\Actions\EditAction::make()->label('Editar'),
+                Action::make('descargar')
+                ->label('Descargar')
+                ->icon('heroicon-c-arrow-down-tray')
+                ->url(fn (Resolucion $record): string => route('descargar.resolucion', $record))
+                ->openUrlInNewTab(),                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
