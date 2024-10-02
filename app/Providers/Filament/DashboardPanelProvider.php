@@ -55,6 +55,9 @@ class DashboardPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge);;
+            ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge)
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+            ]);
     }
 }
