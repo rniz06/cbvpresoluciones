@@ -10,6 +10,8 @@ class EditResolucion extends EditRecord
 {
     protected static string $resource = ResolucionResource::class;
 
+    protected static ?string $title = 'Editar Resolución';
+
     protected function getHeaderActions(): array
     {
         return [

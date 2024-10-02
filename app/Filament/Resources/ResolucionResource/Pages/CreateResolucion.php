@@ -9,4 +9,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateResolucion extends CreateRecord
 {
     protected static string $resource = ResolucionResource::class;
+
+    protected static ?string $title = 'Añadir Resolución';
 }

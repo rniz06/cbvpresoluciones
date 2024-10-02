@@ -10,10 +10,12 @@ class ListResolucions extends ListRecords
 {
     protected static string $resource = ResolucionResource::class;
 
+    protected static ?string $title = 'Resoluciones';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Añadir Resolución'),
         ];
     }
 }

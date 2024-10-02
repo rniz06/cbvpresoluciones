@@ -5,11 +5,15 @@ namespace App\Filament\Resources;
 use Filament\Tables\Actions\Action;
 use App\Filament\Resources\ResolucionResource\Pages;
 use App\Filament\Resources\ResolucionResource\RelationManagers;
+use App\Models\Compania;
+use App\Models\Personal;
 use App\Models\Resolucion;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -29,23 +33,40 @@ class ResolucionResource extends Resource
             ->schema([
                 // Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
                 Forms\Components\Section::make('')
-                ->schema([
-                    Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
-                    Forms\Components\DatePicker::make('fecha')->label('Fecha')->required()->format('Y-m-d'),
-                    Forms\Components\TextInput::make('ano')->label('Año')->required()->numeric(),
-                    Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
+                    ->schema([
+                        Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
+                        Forms\Components\DatePicker::make('fecha')->label('Fecha')->required()->format('Y-m-d'),
+                        Forms\Components\TextInput::make('ano')->label('Año')->required()->numeric(),
+                        Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
 
-                    Forms\Components\Textarea::make('concepto')->label('Concepto')->required()->columnSpan(3),
+                        Forms\Components\Textarea::make('concepto')->label('Concepto')->required()->columnSpan(3),
 
-                    Forms\Components\FileUpload::make('ruta_archivo')
-                    ->label('Subir Resolución')
-                    ->disk('public')
-                    ->directory('resoluciones')
-                    ->preserveFilenames()
-                    ->storeFileNamesIn('nombre_original')
-                    ->required()
-                    ->columnSpan(3),
-                ])->columns(3)
+                        Forms\Components\FileUpload::make('ruta_archivo')
+                            ->label('Subir Resolución')
+                            ->disk('public')
+                            ->directory('resoluciones')
+                            ->preserveFilenames()
+                            ->storeFileNamesIn('nombre_original')
+                            ->required()
+                            ->columnSpan(3),
+                    ])->columns(3),
+
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\Select::make('compania_id')
+                            ->label('Compañias')
+                            ->options(Compania::all()->pluck('compania', 'id'))
+                            ->multiple()
+                            ->searchable()
+                            ->preload(),
+                        Forms\Components\Select::make('personal_id')
+                            ->label('Personales')
+                            ->multiple()
+                            ->options(Personal::all()->pluck('nombre_completo', 'id'))
+                            ->searchable()
+                            ->preload()
+                    ])->columns(2)
+
             ]);
     }
 
@@ -60,15 +81,47 @@ class ResolucionResource extends Resource
                 Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('n_resolucion')
+                ->form([
+                    Forms\Components\TextInput::make('n_resolucion')->label('N° Resolución'),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query->when(
+                        $data['n_resolucion'],
+                        fn (Builder $query, $n_resolucion): Builder => $query->where('n_resolucion', 'like', "%{$n_resolucion}%")
+                    );
+                }),
+            Tables\Filters\Filter::make('fecha')
+                ->form([
+                    Forms\Components\DatePicker::make('fecha_desde')->label('Fecha desde'),
+                    Forms\Components\DatePicker::make('fecha_hasta')->label('Fecha hasta'),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query
+                        ->when(
+                            $data['fecha_desde'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('fecha', '>=', $date)
+                        )
+                        ->when(
+                            $data['fecha_hasta'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date)
+                        );
+                }),
+            Tables\Filters\SelectFilter::make('ano')
+                ->label('Año')
+                ->options(function () {
+                    // Asumiendo que tienes una columna 'ano' en tu tabla
+                    return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
+                })
+                ->multiple(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
                 Action::make('descargar')
-                ->label('Descargar')
-                ->icon('heroicon-c-arrow-down-tray')
-                ->url(fn (Resolucion $record): string => route('descargar.resolucion', $record))
-                ->openUrlInNewTab(),                
+                    ->label('Descargar')
+                    ->icon('heroicon-c-arrow-down-tray')
+                    ->url(fn(Resolucion $record): string => route('descargar.resolucion', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
