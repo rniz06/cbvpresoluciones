@@ -11,4 +11,9 @@ class CreateResolucion extends CreateRecord
     protected static string $resource = ResolucionResource::class;
 
     protected static ?string $title = 'Añadir Resolución';
+
+    protected function getRedirectUrl(): string
+    {
+        return ResolucionResource::getUrl('index');
+    }
 }
