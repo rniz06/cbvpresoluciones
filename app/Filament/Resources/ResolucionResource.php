@@ -55,14 +55,14 @@ class ResolucionResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('compania_id')
                             ->label('Compañias')
-                            ->options(Compania::all()->pluck('compania', 'id'))
+                            ->options(Compania::getSelectOptions())
                             ->multiple()
                             ->searchable()
                             ->preload(),
                         Forms\Components\Select::make('personal_id')
                             ->label('Personales')
                             ->multiple()
-                            ->options(Personal::all()->pluck('nombre_completo', 'id'))
+                            ->options(Personal::getSelectOptions())
                             ->searchable()
                             ->preload()
                     ])->columns(2)
