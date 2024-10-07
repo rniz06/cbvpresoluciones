@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('ruta_archivo');
             $table->text('nombre_original');
             $table->unsignedBigInteger('usuario_id')->nullable();
+            $table->text('compania_id')->nullable();
+            $table->text('personal_id')->nullable();
             $table->timestamps();
 
             $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');

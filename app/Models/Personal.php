@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,9 @@ class Personal extends Model
 
     protected $connection = "db_personal";
 
-    protected $table = "vt_personales";
+    protected $table = "personal";
+
+    protected $primaryKey = 'idpersonal';
 
     public static function getSelectOptions()
     {
@@ -27,5 +30,13 @@ class Personal extends Model
         ");
 
         return collect($results)->pluck('label', 'id');
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function resoluciones(): BelongsToMany
+    {
+        return $this->belongsToMany(Resolucion::class, 'personal_resolucion');
     }
 }

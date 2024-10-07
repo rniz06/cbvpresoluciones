@@ -79,41 +79,49 @@ class ResolucionResource extends Resource
                 Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('ano')->label('Año')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(true),
+                Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
+                    ->label('Compañías')
+                    ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute()),
+
+                Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
+                    ->label('Personal')
+                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute()),
+
             ])
             ->filters([
                 Tables\Filters\Filter::make('n_resolucion')
-                ->form([
-                    Forms\Components\TextInput::make('n_resolucion')->label('N° Resolución'),
-                ])
-                ->query(function (Builder $query, array $data): Builder {
-                    return $query->when(
-                        $data['n_resolucion'],
-                        fn (Builder $query, $n_resolucion): Builder => $query->where('n_resolucion', 'like', "%{$n_resolucion}%")
-                    );
-                }),
-            Tables\Filters\Filter::make('fecha')
-                ->form([
-                    Forms\Components\DatePicker::make('fecha_desde')->label('Fecha desde'),
-                    Forms\Components\DatePicker::make('fecha_hasta')->label('Fecha hasta'),
-                ])
-                ->query(function (Builder $query, array $data): Builder {
-                    return $query
-                        ->when(
-                            $data['fecha_desde'],
-                            fn (Builder $query, $date): Builder => $query->whereDate('fecha', '>=', $date)
-                        )
-                        ->when(
-                            $data['fecha_hasta'],
-                            fn (Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date)
+                    ->form([
+                        Forms\Components\TextInput::make('n_resolucion')->label('N° Resolución'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['n_resolucion'],
+                            fn(Builder $query, $n_resolucion): Builder => $query->where('n_resolucion', 'like', "%{$n_resolucion}%")
                         );
-                }),
-            Tables\Filters\SelectFilter::make('ano')
-                ->label('Año')
-                ->options(function () {
-                    // Asumiendo que tienes una columna 'ano' en tu tabla
-                    return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
-                })
-                ->multiple(),
+                    }),
+                Tables\Filters\Filter::make('fecha')
+                    ->form([
+                        Forms\Components\DatePicker::make('fecha_desde')->label('Fecha desde'),
+                        Forms\Components\DatePicker::make('fecha_hasta')->label('Fecha hasta'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['fecha_desde'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('fecha', '>=', $date)
+                            )
+                            ->when(
+                                $data['fecha_hasta'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date)
+                            );
+                    }),
+                Tables\Filters\SelectFilter::make('ano')
+                    ->label('Año')
+                    ->options(function () {
+                        // Asumiendo que tienes una columna 'ano' en tu tabla
+                        return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
+                    })
+                    ->multiple(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
