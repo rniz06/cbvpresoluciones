@@ -18,6 +18,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class ResolucionResource extends Resource
 {
@@ -83,9 +84,33 @@ class ResolucionResource extends Resource
                     ->label('Compañías')
                     ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute()),
 
-                Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
+                Tables\Columns\TextColumn::make('personal_names')
                     ->label('Personal')
-                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute()),
+                    ->formatStateUsing(function ($state) {
+                        if (is_string($state)) {
+                            // Si $state es una cadena, la dividimos en un array
+                            $names = explode(',', $state);
+                        } elseif (is_array($state)) {
+                            // Si ya es un array, lo usamos directamente
+                            $names = $state;
+                        } else {
+                            // Si no es ni string ni array, devolvemos un string vacío
+                            return new HtmlString('');
+                        }
+
+                        // Limpiamos los nombres y filtramos los valores vacíos
+                        $names = array_filter(array_map('trim', $names));
+
+                        // Limitamos a 5 nombres y añadimos '...' si hay más
+                        $limitedNames = array_slice($names, 0, 5);
+                        $html = implode('<br>', $limitedNames);
+                        if (count($names) > 5) {
+                            $html .= '<br>...';
+                        }
+
+                        return new HtmlString($html);
+                    })
+                    ->html(),
 
             ])
             ->filters([

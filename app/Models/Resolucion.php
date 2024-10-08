@@ -51,37 +51,21 @@ class Resolucion extends Model
     protected function casts(): array
     {
         return [
-            'compania_id' => 'array',
             'personal_id' => 'array',
+            'compania_id' => 'array',
         ];
     }
 
     public function getPersonalNamesAttribute()
     {
         $ids = $this->personal_id;
-
-        // Asegúrate de que $ids sea una cadena y luego convierte a array
         $idsArray = is_array($ids) ? $ids : explode(',', $ids);
-
-        // Escapa los IDs para evitar inyecciones SQL
         $idsArray = array_map('intval', $idsArray);
 
-        // Crea una cadena con los IDs para la consulta
-        $idsString = implode(',', $idsArray);
-
-        $results = DB::select("
-            SELECT
-	            idpersonal, nombrecompleto
-            FROM
-	            personalcbvp.personal
-            WHERE 
-	            idpersonal IN (1,2,3,4)
-            ORDER BY 
-	            nombrecompleto;
-        ");
-
-        // Extraer solo los nombres de las compañías
-        return array_column($results, 'personal');
+        return Personal::whereIn('idpersonal', $idsArray)
+            ->orderBy('nombrecompleto')
+            ->pluck('nombrecompleto')
+            ->toArray();
     }
 
     public function getCompaniasNamesAttribute()
@@ -112,6 +96,4 @@ class Resolucion extends Model
         // Extraer solo los nombres de las compañías
         return array_column($results, 'compania');
     }
-
-    
 }
