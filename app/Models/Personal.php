@@ -13,7 +13,7 @@ class Personal extends Model
 
     protected $connection = "db_personal";
 
-    protected $table = "personal";
+    protected $table = "personalcbvp.vt_personales";
 
     protected $primaryKey = 'idpersonal';
 
@@ -30,13 +30,5 @@ class Personal extends Model
         ");
 
         return collect($results)->pluck('label', 'id');
-    }
-
-    /**
-     * The roles that belong to the user.
-     */
-    public function resoluciones(): BelongsToMany
-    {
-        return $this->belongsToMany(Resolucion::class, 'personal_resolucion');
     }
 }

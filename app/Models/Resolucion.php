@@ -59,13 +59,35 @@ class Resolucion extends Model
     public function getPersonalNamesAttribute()
     {
         $ids = $this->personal_id;
+        // Asegúrate de que $ids sea una cadena y luego convierte a array
         $idsArray = is_array($ids) ? $ids : explode(',', $ids);
+        // Escapa los IDs para evitar inyecciones SQL
         $idsArray = array_map('intval', $idsArray);
 
-        return Personal::whereIn('idpersonal', $idsArray)
+        $results = Personal::whereIn('idpersonal', $idsArray)
             ->orderBy('nombrecompleto')
             ->pluck('nombrecompleto')
             ->toArray();
+
+        // Unir los nombres en una sola cadena
+        return implode(', ', $results);
+    }
+
+    public function getPersonalView()
+    {
+        $ids = $this->personal_id;
+        // Asegúrate de que $ids sea una cadena y luego convierte a array
+        $idsArray = is_array($ids) ? $ids : explode(',', $ids);
+        // Escapa los IDs para evitar inyecciones SQL
+        $idsArray = array_map('intval', $idsArray);
+
+        $results = Personal::whereIn('idpersonal', $idsArray)
+            ->orderBy('nombrecompleto')
+            ->select(DB::raw("CONCAT(nombrecompleto, ' - ', codigo, ' - ', categoria) as info"))
+            ->pluck('info')
+            ->toArray();
+
+        return $results;
     }
 
     public function getCompaniasNamesAttribute()

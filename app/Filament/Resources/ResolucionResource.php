@@ -84,33 +84,9 @@ class ResolucionResource extends Resource
                     ->label('Compañías')
                     ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute()),
 
-                Tables\Columns\TextColumn::make('personal_names')
+                    Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
                     ->label('Personal')
-                    ->formatStateUsing(function ($state) {
-                        if (is_string($state)) {
-                            // Si $state es una cadena, la dividimos en un array
-                            $names = explode(',', $state);
-                        } elseif (is_array($state)) {
-                            // Si ya es un array, lo usamos directamente
-                            $names = $state;
-                        } else {
-                            // Si no es ni string ni array, devolvemos un string vacío
-                            return new HtmlString('');
-                        }
-
-                        // Limpiamos los nombres y filtramos los valores vacíos
-                        $names = array_filter(array_map('trim', $names));
-
-                        // Limitamos a 5 nombres y añadimos '...' si hay más
-                        $limitedNames = array_slice($names, 0, 5);
-                        $html = implode('<br>', $limitedNames);
-                        if (count($names) > 5) {
-                            $html .= '<br>...';
-                        }
-
-                        return new HtmlString($html);
-                    })
-                    ->html(),
+                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute()),
 
             ])
             ->filters([
@@ -150,6 +126,7 @@ class ResolucionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
+                Tables\Actions\ViewAction::make()->label('Ver'),
                 Action::make('descargar')
                     ->label('Descargar')
                     ->icon('heroicon-c-arrow-down-tray')
@@ -175,6 +152,7 @@ class ResolucionResource extends Resource
         return [
             'index' => Pages\ListResolucions::route('/'),
             'create' => Pages\CreateResolucion::route('/create'),
+            'view' => Pages\ViewResolucion::route('/{record}'),
             'edit' => Pages\EditResolucion::route('/{record}/edit'),
         ];
     }
