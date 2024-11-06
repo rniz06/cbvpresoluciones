@@ -1,6 +1,6 @@
-# Sistema de Gestión de Resoluciones
+# Sistema de Gestión de Resoluciones CBVP
 
-Este proyecto es un sistema de gestión de resoluciones desarrollado con Laravel y Filament.
+Sistema de gestion de resoluciones desarrollo con laravel utilizando ademas el paquete filament
 
 ## Requisitos previos
 
@@ -11,8 +11,7 @@ Este proyecto es un sistema de gestión de resoluciones desarrollado con Laravel
 ## Instalación
 
 1. Clona el repositorio:
-
-  ```bash
+  ``bash
   git clone https://github.com/rniz06/cbvpresoluciones.git
 
 2. En el directorio Instala las dependencias de Composer:
