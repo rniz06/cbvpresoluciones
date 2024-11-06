@@ -16,23 +16,34 @@ Sistema de gestion de resoluciones desarrollo con laravel utilizando ademas el p
 
 1. Clona el repositorio:
 
-  ``bash
-  git clone https://github.com/rniz06/cbvpresoluciones.git
+    ```bash
+    git clone https://github.com/rniz06/cbvpresoluciones.git
+    ```
 
 2. En el directorio Instala las dependencias de Composer:
+    ```bash
     composer install
+    ```
 
 3. Copia el archivo de configuración .env.example a .env y configura tus variables de entorno:
+    ```bash
     cp .env.example .env
+    ```
 
 4. Genera una nueva clave de aplicación:
+    ```bash
     php artisan key:generate
+    ```
 
 5. Realiza las migraciones y ejecuta los seeders:
+    ```bash
     php artisan migrate --seed
+    ```
 
 6. Ejecutar el comando de shield para generar los roles y permisos para cada modulo:
+    ```bash
     php artisan shield:install
+    ```
 
 ¡Listo! Ahora puedes acceder al sistema en tu navegador web.
 
