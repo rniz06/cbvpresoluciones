@@ -2,6 +2,10 @@
 
 Sistema de gestion de resoluciones desarrollo con laravel utilizando ademas el paquete filament
 
+## Tecnologías
+- Laravel 11
+- Filament 3 
+
 ## Requisitos previos
 
 - PHP 8.2 o superior
@@ -11,7 +15,8 @@ Sistema de gestion de resoluciones desarrollo con laravel utilizando ademas el p
 ## Instalación
 
 1. Clona el repositorio:
-  ``bash
+
+  ```bash
   git clone https://github.com/rniz06/cbvpresoluciones.git
 
 2. En el directorio Instala las dependencias de Composer:
