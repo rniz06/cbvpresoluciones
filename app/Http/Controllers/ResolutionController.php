@@ -14,7 +14,7 @@ class ResolutionController extends Controller
 
         $content = Storage::disk('public')->path($data->ruta_archivo);
 
-        return response()->download($content);
+        return response()->download($content, $data->nombre_original);
 
         // $filePath = storage_path('app/public/' . $record->file_path);
 
