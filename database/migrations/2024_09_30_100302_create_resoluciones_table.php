@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string('n_resolucion')->unique();
             $table->longText('concepto');
             $table->date('fecha')->nullable();
-            $table->year('ano');
-            $table->text('ruta_archivo');
-            $table->text('nombre_original');
+            $table->year('ano')->nullable();
+            $table->text('ruta_archivo')->nullable();
+            $table->text('nombre_original')->nullable();
+            $table->string('archivo_nombre_generado')->nullable();
+            $table->string('archivo_tamano')->nullable();
+            $table->string('archivo_tipo')->nullable();
             $table->unsignedBigInteger('usuario_id')->nullable();
             $table->text('compania_id')->nullable();
             $table->text('personal_id')->nullable();

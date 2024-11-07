@@ -25,6 +25,9 @@ class Resolucion extends Model
         'usuario_id',
         'ruta_archivo',
         'nombre_original',
+        'archivo_nombre_generado',
+        'archivo_tamano',
+        'archivo_tipo',
         'compania_id',
         'personal_id',
     ];
