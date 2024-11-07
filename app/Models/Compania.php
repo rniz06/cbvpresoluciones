@@ -13,23 +13,18 @@ class Compania extends Model
 
     protected $connection = "db_companias";
 
-    protected $table = "companias";
+    protected $table = "vt_companias";
 
     protected $primaryKey = 'idcompanias';
 
     public static function getSelectOptions()
     {
-        $results = DB::select("
-            SELECT 
-                idcompanias AS id,
-                CONCAT(compania, ' - ', departamento, ' - ', ciudad) AS label
-            FROM 
-                emepy_bd.vt_companias
-            ORDER BY 
-                compania, departamento, ciudad
-        ");
-
-        return collect($results)->pluck('label', 'id');
+        return Compania::selectRaw('idcompanias AS id, CONCAT(compania, \' - \', departamento, \' - \', ciudad) AS label')
+            ->orderBy('compania')
+            ->orderBy('departamento')
+            ->orderBy('ciudad')
+            ->get()
+            ->pluck('label', 'id');
     }
 
     /**

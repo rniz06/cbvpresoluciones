@@ -100,22 +100,42 @@ class Resolucion extends Model
         // Escapa los IDs para evitar inyecciones SQL
         $idsArray = array_map('intval', $idsArray);
 
-        // Crea una cadena con los IDs para la consulta
-        $idsString = implode(',', $idsArray);
+        $results = Compania::whereIn('idcompanias', $idsArray)
+            ->orderBy('compania')
+            ->selectRaw("compania")
+            ->get()
+            ->pluck('compania')
+            ->toArray();
 
-        $results = DB::select("
-            SELECT 
-                idcompanias AS id,
-                compania            
-            FROM 
-                emepy_bd.companias
-            WHERE 
-                idcompanias IN ($idsString)
-            ORDER BY 
-                compania;
-        ");
-
-        // Extraer solo los nombres de las compañías
-        return array_column($results, 'compania');
+        return $results;
     }
+
+    // public function getCompaniasNamesAttribute()
+    // {
+    //     $ids = $this->compania_id;
+
+    //     // Asegúrate de que $ids sea una cadena y luego convierte a array
+    //     $idsArray = is_array($ids) ? $ids : explode(',', $ids);
+
+    //     // Escapa los IDs para evitar inyecciones SQL
+    //     $idsArray = array_map('intval', $idsArray);
+
+    //     // Crea una cadena con los IDs para la consulta
+    //     $idsString = implode(',', $idsArray);
+
+    //     $results = DB::select("
+    //         SELECT 
+    //             idcompanias AS id,
+    //             compania            
+    //         FROM 
+    //             emepy_bd.companias
+    //         WHERE 
+    //             idcompanias IN ($idsString)
+    //         ORDER BY 
+    //             compania;
+    //     ");
+
+    //     // Extraer solo los nombres de las compañías
+    //     return array_column($results, 'compania');
+    // }
 }
