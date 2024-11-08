@@ -113,32 +113,9 @@ class Resolucion extends Model
         return $results;
     }
 
-    // public function getCompaniasNamesAttribute()
-    // {
-    //     $ids = $this->compania_id;
-
-    //     // Asegúrate de que $ids sea una cadena y luego convierte a array
-    //     $idsArray = is_array($ids) ? $ids : explode(',', $ids);
-
-    //     // Escapa los IDs para evitar inyecciones SQL
-    //     $idsArray = array_map('intval', $idsArray);
-
-    //     // Crea una cadena con los IDs para la consulta
-    //     $idsString = implode(',', $idsArray);
-
-    //     $results = DB::select("
-    //         SELECT 
-    //             idcompanias AS id,
-    //             compania            
-    //         FROM 
-    //             emepy_bd.companias
-    //         WHERE 
-    //             idcompanias IN ($idsString)
-    //         ORDER BY 
-    //             compania;
-    //     ");
-
-    //     // Extraer solo los nombres de las compañías
-    //     return array_column($results, 'compania');
-    // }
+    public function scopeBuscar($query, $value)
+    {
+        $query->where('n_resolucion', 'like', "%{$value}%")
+        ->orWhere('concepto', 'like', "%{$value}%");
+    }
 }
