@@ -63,23 +63,21 @@
                                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $resolucion->n_resolucion }}</th>
                                     <td class="px-4 py-3">{{ $resolucion->concepto }}</td>
-                                    <td class="px-4 py-3 text-green-500">
+                                    <td class="px-4 py-3">
                                         {{ date('d/m/Y', strtotime($resolucion->fecha)) }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->ano }}</td>
                                     {{-- <td class="px-4 py-3">updated_at</td> --}}
                                     <td class="px-4 py-3 flex items-center justify-end">
-                                        <button class="px-3 py-1 bg-red-500 text-white rounded">X</button>
+                                        <a href="{{route('descargar.resolucion', $resolucion->id)}}" style="background-color: #FEDD00" class="px-3 py-1 text-white rounded"><i class="fas fa-download"></i></a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td>
-                                        <p>Sin registros coincidentes...</p>
+                                    <td colspan="5" class="text-center py-3">
+                                        <p class="text-gray-500">Sin registros coincidentes...</p>
                                     </td>
                                 </tr>
                             @endforelse
-
-
                         </tbody>
                     </table>
                 </div>
