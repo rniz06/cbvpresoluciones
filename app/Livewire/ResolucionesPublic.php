@@ -14,6 +14,7 @@ class ResolucionesPublic extends Component
     public string $buscar = "";
     public $paginado = 5;
     public $anosFilter = '';
+    public $fechaDesde = '';
 
     public function updating($key): void
     {
@@ -31,6 +32,9 @@ class ResolucionesPublic extends Component
         ->buscar($this->buscar)
         ->when($this->anosFilter !== '', function($query){
             $query->where('ano', $this->anosFilter);
+        })
+        ->when($this->fechaDesde !== '', function($query){
+            $query->where('fecha', $this->fechaDesde);
         })
         ->paginate($this->paginado);
 
