@@ -58,6 +58,7 @@ class DashboardPanelProvider extends PanelProvider
             ->maxContentWidth(MaxWidth::ScreenTwoExtraLarge)
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            ]);
+            ])
+            ->sidebarCollapsibleOnDesktop();
     }
 }
