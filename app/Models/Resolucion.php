@@ -25,6 +25,9 @@ class Resolucion extends Model
         'usuario_id',
         'ruta_archivo',
         'nombre_original',
+        'archivo_nombre_generado',
+        'archivo_tamano',
+        'archivo_tipo',
         'compania_id',
         'personal_id',
     ];
@@ -100,22 +103,19 @@ class Resolucion extends Model
         // Escapa los IDs para evitar inyecciones SQL
         $idsArray = array_map('intval', $idsArray);
 
-        // Crea una cadena con los IDs para la consulta
-        $idsString = implode(',', $idsArray);
+        $results = Compania::whereIn('idcompanias', $idsArray)
+            ->orderBy('compania')
+            ->selectRaw("compania")
+            ->get()
+            ->pluck('compania')
+            ->toArray();
 
-        $results = DB::select("
-            SELECT 
-                idcompanias AS id,
-                compania            
-            FROM 
-                emepy_bd.companias
-            WHERE 
-                idcompanias IN ($idsString)
-            ORDER BY 
-                compania;
-        ");
+        return $results;
+    }
 
-        // Extraer solo los nombres de las compañías
-        return array_column($results, 'compania');
+    public function scopeBuscar($query, $value)
+    {
+        $query->where('n_resolucion', 'like', "%{$value}%")
+        ->orWhere('concepto', 'like', "%{$value}%");
     }
 }

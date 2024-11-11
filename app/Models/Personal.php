@@ -13,22 +13,15 @@ class Personal extends Model
 
     protected $connection = "db_personal";
 
-    protected $table = "personalcbvp.vt_personales";
+    protected $table = "vt_personales";
 
     protected $primaryKey = 'idpersonal';
 
     public static function getSelectOptions()
     {
-        $results = DB::select("
-            SELECT 
-                idpersonal AS id,
-                CONCAT(nombrecompleto, ' - ', codigo, ' - ', categoria) AS label
-            FROM 
-                personalcbvp.vt_personales            
-            ORDER BY 
-                nombrecompleto
-        ");
-
-        return collect($results)->pluck('label', 'id');
+        return Personal::selectRaw('idpersonal AS id, CONCAT(nombrecompleto, \' - \', codigo, \' - \', categoria) AS label')
+            ->orderBy('nombrecompleto')
+            ->get()
+            ->pluck('label', 'id');
     }
 }

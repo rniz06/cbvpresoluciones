@@ -69,6 +69,11 @@ return [
             'database' => env('DB_DATABASE_COMPANIAS', 'forge'),
             'username' => env('DB_USERNAME_COMPANIAS', 'forge'),
             'password' => env('DB_PASSWORD_COMPANIAS', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                \PDO::ATTR_EMULATE_PREPARES => true
+            ]) : [],
             // ...
         ],
 
@@ -79,6 +84,11 @@ return [
             'database' => env('DB_DATABASE_PERSONAL', 'forge'),
             'username' => env('DB_USERNAME_PERSONAL', 'forge'),
             'password' => env('DB_PASSWORD_PERSONAL', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                \PDO::ATTR_EMULATE_PREPARES => true
+            ]) : [],
             // ...
         ],
 

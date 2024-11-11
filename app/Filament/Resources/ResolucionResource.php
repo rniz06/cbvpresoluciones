@@ -45,10 +45,13 @@ class ResolucionResource extends Resource
                         Forms\Components\FileUpload::make('ruta_archivo')
                             ->label('Subir Resolución')
                             ->disk('public')
-                            ->directory('resoluciones')
-                            ->preserveFilenames()
+                            ->directory('resoluciones/' . date('Y') . '/' . date('m') . '/' . date('d'))
+                            // ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
+                            ->maxSize(2048)
                             ->required()
+                            ->previewable(true)
+                            ->uploadingMessage('Subiendo archivo adjunto...')
                             ->columnSpan(3),
                     ])->columns(3),
 
