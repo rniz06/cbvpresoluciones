@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Illuminate\Support\Str;
 use Filament\Tables\Actions\Action;
 use App\Filament\Resources\ResolucionResource\Pages;
 use App\Filament\Resources\ResolucionResource\RelationManagers;
@@ -46,13 +47,34 @@ class ResolucionResource extends Resource
                             ->label('Origen')
                             ->options(FuenteOrigen::all()->pluck('origen', 'id'))
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->afterStateUpdated(function ($set, $state) {
+                                $fuenteOrigen = FuenteOrigen::find($state);
+                                if ($fuenteOrigen) {
+                                    $origen = Str::lower($fuenteOrigen->origen);
+                                    $set('upload_directory_origen', $origen);
+                                }
+                            }),
 
                         Forms\Components\Select::make('tipo_documento_id')
                             ->label('Tipo Documento')
                             ->options(TipoDocumento::all()->pluck('tipo', 'id'))
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($set, $state) {
+                                $tipoDocumento = TipoDocumento::find($state);
+                                if ($tipoDocumento) {
+                                    $directorio = Str::lower($tipoDocumento->tipo);
+                                    $set('upload_directory_tipo', $directorio);
+                                }
+                            }),
+
+                        // Campos ocultos para almacenar las partes del directorio
+                        Forms\Components\Hidden::make('upload_directory_tipo')
+                            ->default('resoluciones'),
+                        Forms\Components\Hidden::make('upload_directory_origen')
+                            ->default('directorio'),
                     ])->columns(3),
 
                 Forms\Components\Section::make('')
@@ -62,7 +84,12 @@ class ResolucionResource extends Resource
                         Forms\Components\FileUpload::make('ruta_archivo')
                             ->label('Subir Resolución')
                             ->disk('public')
-                            ->directory('resoluciones/' . date('Y') . '/' . date('m') . '/' . date('d'))
+                            ->directory(function (callable $get) {
+                                $tipo = $get('upload_directory_tipo');
+                                $origen = $get('upload_directory_origen');
+                                return $tipo . '/' . $origen . '/' . date('Y') . '/' . date('m') . '/' . date('d');
+                            })
+                            // ->directory('resoluciones/' . date('Y') . '/' . date('m') . '/' . date('d'))
                             // ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
                             ->maxSize(2048)
