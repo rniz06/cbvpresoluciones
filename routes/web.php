@@ -9,4 +9,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/descargar-resolucion/{resolution}', [ResolutionController::class, 'download'])->name('descargar.resolucion');
-Route::get('/public', ResolucionesPublic::class);
+Route::get('/', ResolucionesPublic::class);
