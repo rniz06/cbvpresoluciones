@@ -85,7 +85,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="text-center py-3">
-                                        <p class="text-gray-500">Sin registros coincidentes...</p>
+                                        <p class="text-gray-500 italic">Sin registros coincidentes...</p>
                                     </td>
                                 </tr>
                             @endforelse
