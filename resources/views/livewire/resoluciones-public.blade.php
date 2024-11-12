@@ -61,6 +61,8 @@
                                 <th scope="col" class="px-4 py-3">Concepto:</th>
                                 <th scope="col" class="px-4 py-3">Fecha:</th>
                                 <th scope="col" class="px-4 py-3">Año:</th>
+                                <th scope="col" class="px-4 py-3">Origen:</th>
+                                <th scope="col" class="px-4 py-3">Tipo:</th>
                                 {{-- <th scope="col" class="px-4 py-3">Last update</th> --}}
                                 <th scope="col" class="px-4 py-3">
                                     <span class="sr-only">Acciones</span>
@@ -77,6 +79,8 @@
                                     <td class="px-4 py-3">
                                         {{ date('d/m/Y', strtotime($resolucion->fecha)) }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->ano }}</td>
+                                    <td class="px-4 py-3">{{ $resolucion->fuenteOrigen->origen }}</td>
+                                    <td class="px-4 py-3">{{ $resolucion->tipoDocumento->tipo }}</td>
                                     {{-- <td class="px-4 py-3">updated_at</td> --}}
                                     <td class="px-4 py-3 flex items-center justify-end">
                                         <a href="{{route('descargar.resolucion', $resolucion->id)}}" style="background-color: #FEDD00" class="px-3 py-1 text-white rounded"><i class="fas fa-download"></i></a>
@@ -85,7 +89,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="text-center py-3">
-                                        <p class="text-gray-500">Sin registros coincidentes...</p>
+                                        <p class="text-gray-500 italic">Sin registros coincidentes...</p>
                                     </td>
                                 </tr>
                             @endforelse

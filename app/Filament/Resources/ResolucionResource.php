@@ -6,8 +6,10 @@ use Filament\Tables\Actions\Action;
 use App\Filament\Resources\ResolucionResource\Pages;
 use App\Filament\Resources\ResolucionResource\RelationManagers;
 use App\Models\Compania;
+use App\Models\FuenteOrigen;
 use App\Models\Personal;
 use App\Models\Resolucion;
+use App\Models\TipoDocumento;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -40,6 +42,21 @@ class ResolucionResource extends Resource
                         Forms\Components\TextInput::make('ano')->label('Año')->required()->numeric(),
                         Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
 
+                        Forms\Components\Select::make('fuente_origen_id')
+                            ->label('Origen')
+                            ->options(FuenteOrigen::all()->pluck('origen', 'id'))
+                            ->preload()
+                            ->required(),
+
+                        Forms\Components\Select::make('tipo_documento_id')
+                            ->label('Tipo Documento')
+                            ->options(TipoDocumento::all()->pluck('tipo', 'id'))
+                            ->preload()
+                            ->required(),
+                    ])->columns(3),
+
+                Forms\Components\Section::make('')
+                    ->schema([
                         Forms\Components\Textarea::make('concepto')->label('Concepto')->required()->columnSpan(3),
 
                         Forms\Components\FileUpload::make('ruta_archivo')
@@ -53,7 +70,7 @@ class ResolucionResource extends Resource
                             ->previewable(true)
                             ->uploadingMessage('Subiendo archivo adjunto...')
                             ->columnSpan(3),
-                    ])->columns(3),
+                    ]),
 
                 Forms\Components\Section::make()
                     ->schema([
@@ -82,14 +99,20 @@ class ResolucionResource extends Resource
                 Tables\Columns\TextColumn::make('concepto')->label('Concepto')->limit(50),
                 Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('ano')->label('Año')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(true),
+                Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('fuenteOrigen.origen')->label('Origen')->searchable()->sortable()->badge()->color('gray'),
+                Tables\Columns\TextColumn::make('tipoDocumento.tipo')->label('Tipo')->searchable()->sortable()->badge(),
+
                 Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
                     ->label('Compañías')
-                    ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute()),
+                    ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute())
+                    ->toggleable(isToggledHiddenByDefault: true),
 
-                    Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
+                Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
                     ->label('Personal')
-                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute()),
+                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute())
+                    ->toggleable(isToggledHiddenByDefault: true),
 
             ])
             ->filters([
@@ -141,6 +164,13 @@ class ResolucionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
     }
 
     public static function getRelations(): array

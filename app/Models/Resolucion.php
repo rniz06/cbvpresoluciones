@@ -30,6 +30,8 @@ class Resolucion extends Model
         'archivo_tipo',
         'compania_id',
         'personal_id',
+        'fuente_origen_id',
+        'tipo_documento_id',
     ];
 
     /**
@@ -39,6 +41,18 @@ class Resolucion extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    // Relacion uno a muchos con la tabla "fuete_origen" a travez del campo "fuente_origen_id"
+    public function fuenteOrigen()
+    {
+        return $this->belongsTo(FuenteOrigen::class, 'fuente_origen_id');
+    }
+
+    // Relacion uno a muchos con la tabla "tipo_documentos" a travez del campo "tipo_documento_id"
+    public function tipoDocumento()
+    {
+        return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
     }
 
     public function personales(): BelongsToMany

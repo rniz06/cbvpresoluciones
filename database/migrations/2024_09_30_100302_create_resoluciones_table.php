@@ -25,9 +25,13 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_id')->nullable();
             $table->text('compania_id')->nullable();
             $table->text('personal_id')->nullable();
+            $table->unsignedBigInteger('tipo_documento_id')->nullable();
+            $table->unsignedBigInteger('fuente_origen_id')->nullable();
             $table->timestamps();
 
             $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('tipo_documento_id')->references('id')->on('tipo_documentos')->onDelete('set null');
+            $table->foreign('fuente_origen_id')->references('id')->on('fuente_origen')->onDelete('set null');
         });
     }
 

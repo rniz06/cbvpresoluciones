@@ -21,5 +21,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'ronaldalexisniznunez@gmail.com',
             'password' => Hash::make('Paraguay2024!'),
         ]);
+
+        $this->call([
+            FuenteOrigenSeeder::class,
+            TipoDocumentoSeeder::class,
+        ]);
     }
 }
