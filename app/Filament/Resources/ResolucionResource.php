@@ -48,7 +48,7 @@ class ResolucionResource extends Resource
                             ->preload()
                             ->required(),
 
-                            Forms\Components\Select::make('tipo_documento_id')
+                        Forms\Components\Select::make('tipo_documento_id')
                             ->label('Tipo Documento')
                             ->options(TipoDocumento::all()->pluck('tipo', 'id'))
                             ->preload()
@@ -164,6 +164,13 @@ class ResolucionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
     }
 
     public static function getRelations(): array

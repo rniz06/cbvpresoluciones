@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ResolucionResource\Pages;
 
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Infolist;
@@ -14,7 +15,7 @@ class ViewResolucion extends ViewRecord
 {
     protected static string $resource = ResolucionResource::class;
 
-    protected static ?string $title = 'Detalles de la resolución';
+    protected static ?string $title = 'Detalles de Documento';
 
     protected function getHeaderActions(): array
     {
@@ -27,6 +28,13 @@ class ViewResolucion extends ViewRecord
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
+    }
+
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
@@ -37,6 +45,8 @@ class ViewResolucion extends ViewRecord
                         TextEntry::make('fecha')->label('Fecha:')->date(),
                         TextEntry::make('ano')->label('Año:')->badge(),
                         TextEntry::make('usuario.name')->label('Agregado Por:'),
+                        TextEntry::make('tipoDocumento.tipo')->label('Tipo Documento:')->badge(),
+                        TextEntry::make('fuenteOrigen.origen')->label('Origen:')->badge(),
                         Section::make([
                             TextEntry::make('concepto')->label('Concepto:')->columnSpanFull(),
                         ])
@@ -53,7 +63,7 @@ class ViewResolucion extends ViewRecord
                             ->getStateUsing(fn($record) => $record->getPersonalView())
                             ->listWithLineBreaks()
                             ->bulleted(),
-                    ])->columns(),                
+                    ])->columns(),
             ]);
     }
 }
