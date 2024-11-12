@@ -29,7 +29,8 @@ class ResolucionesPublic extends Component
         //
         $anos = Resolucion::distinct()->orderBy('ano', 'desc')->pluck('ano', 'ano')->toArray();
 
-        $resoluciones = Resolucion::select('id', 'n_resolucion', 'concepto', 'fecha', 'ano')
+        $resoluciones = Resolucion::select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'fuente_origen_id', 'tipo_documento_id')
+        ->with(['tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
         ->buscar($this->buscar)
         ->when($this->anosFilter !== '', function($query){
             $query->where('ano', $this->anosFilter);
