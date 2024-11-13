@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\FuenteOrigen;
 use App\Models\Resolucion;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,10 +17,11 @@ class ResolucionesPublic extends Component
     public $anosFilter = '';
     public $fechaDesde = '';
     public $fechaHasta = '';
+    public $origen = '';
 
     public function updating($key): void
     {
-        if ($key === 'buscar' || $key === 'paginado' || $key === 'anosFilter' || $key === 'fechaDesde' || $key === 'fechaHasta') {
+        if ($key === 'buscar' || $key === 'paginado' || $key === 'anosFilter' || $key === 'fechaDesde' || $key === 'fechaHasta' || $key === 'origen') {
             $this->resetPage();
         }
     }
@@ -29,12 +31,19 @@ class ResolucionesPublic extends Component
         //
         $anos = Resolucion::distinct()->orderBy('ano', 'desc')->pluck('ano', 'ano')->toArray();
 
+        //
+        $origenes = FuenteOrigen::select('id', 'origen')->get();
+
         $resoluciones = Resolucion::select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'fuente_origen_id', 'tipo_documento_id')
         ->with(['tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
         ->buscar($this->buscar)
         ->when($this->anosFilter !== '', function($query){
             $query->where('ano', $this->anosFilter);
         })
+        ->when($this->origen !== '', function($query){
+            $query->where('fuente_origen_id', $this->origen);
+        })
+
         ->when($this->fechaDesde || $this->fechaHasta, function ($query) {
             if ($this->fechaDesde && $this->fechaHasta) {
                 // Filtra por el rango de fechas si ambos campos están completos
@@ -55,6 +64,7 @@ class ResolucionesPublic extends Component
         return view('livewire.resoluciones-public', [
             'resoluciones' => $resoluciones,
             'anos' => $anos,
+            'origenes' => $origenes,
         ]);
     }
 

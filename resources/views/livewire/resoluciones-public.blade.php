@@ -22,6 +22,17 @@
                     <div class="flex space-x-3">
 
                         <div class="flex space-x-3 items-center">
+                            <label class="w-40 ml-4 text-sm font-medium text-gray-900">Origen :</label>
+                            <select wire:model.live="origen"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 ">
+                                <option value="">Seleccionar...</option>
+                                @foreach ($origenes as $origen)
+                                    <option value="{{ $origen->id }}">{{ $origen->origen}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="flex space-x-3 items-center">
                             <label class="w-40 text-sm font-medium text-gray-900">Fecha Desde :</label>
                             <input type="date" wire:model.live="fechaDesde" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1">
                         </div>
