@@ -90,9 +90,9 @@ class ResolucionResource extends Resource
                                 return $tipo . '/' . $origen . '/' . date('Y') . '/' . date('m') . '/' . date('d');
                             })
                             // ->directory('resoluciones/' . date('Y') . '/' . date('m') . '/' . date('d'))
-                            // ->preserveFilenames()
+                            ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
-                            ->maxSize(2048)
+                            ->maxSize(20480)
                             ->required()
                             ->previewable(true)
                             ->uploadingMessage('Subiendo archivo adjunto...')
@@ -188,7 +188,7 @@ class ResolucionResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
