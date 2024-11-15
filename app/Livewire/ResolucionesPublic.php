@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\FuenteOrigen;
 use App\Models\Resolucion;
+use App\Models\vistas\ResolucionView;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,8 +35,8 @@ class ResolucionesPublic extends Component
         //
         $origenes = FuenteOrigen::select('id', 'origen')->get();
 
-        $resoluciones = Resolucion::select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'fuente_origen_id', 'tipo_documento_id')
-        ->with(['tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
+        $resoluciones = ResolucionView::select('id_resolucion', 'n_resolucion', 'concepto', 'fecha', 'ano', 'fuente_origen', 'tipo_documento', 'fuente_origen_id', 'tipo_documento_id')
+        // ->with(['tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
         ->buscar($this->buscar)
         ->when($this->anosFilter !== '', function($query){
             $query->where('ano', $this->anosFilter);

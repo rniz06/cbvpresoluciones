@@ -43,10 +43,10 @@
                         </div>
 
                         <div class="flex space-x-3 items-center">
-                            <label class="w-40 text-sm font-medium text-gray-900">Años :</label>
+                            <label class="w-40 ml-4 text-sm font-medium text-gray-900">Años :</label>
                             <select wire:model.live="anosFilter"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 ">
-                                <option>Seleccionar...</option>
+                                <option value="">Seleccionar...</option>
                                 @foreach ($anos as $ano)
                                     <option value="{{ $ano }}">{{ $ano }}</option>
                                 @endforeach
@@ -90,11 +90,11 @@
                                     <td class="px-4 py-3">
                                         {{ date('d/m/Y', strtotime($resolucion->fecha)) }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->ano }}</td>
-                                    <td class="px-4 py-3">{{ $resolucion->fuenteOrigen->origen }}</td>
-                                    <td class="px-4 py-3">{{ $resolucion->tipoDocumento->tipo }}</td>
+                                    <td class="px-4 py-3">{{ $resolucion->fuente_origen }}</td>
+                                    <td class="px-4 py-3">{{ $resolucion->tipo_documento }}</td>
                                     {{-- <td class="px-4 py-3">updated_at</td> --}}
                                     <td class="px-4 py-3 flex items-center justify-end">
-                                        <a href="{{route('descargar.resolucion', $resolucion->id)}}" style="background-color: #FEDD00" class="px-3 py-1 text-white rounded"><i class="fas fa-download"></i></a>
+                                        <a href="{{route('descargar.resolucion', $resolucion->id_resolucion)}}" style="background-color: #FEDD00" class="px-3 py-1 text-white rounded"><i class="fas fa-download"></i></a>
                                     </td>
                                 </tr>
                             @empty
