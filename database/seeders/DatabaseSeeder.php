@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'CBVP Administrador',
-            'email' => 'ronaldalexisniznunez@gmail.com',
-            'password' => Hash::make('Paraguay2024!'),
+            'email' => 'ti@cbvp.org.py',
+            'password' => Hash::make('Paraguay2024'),
         ]);
 
         $this->call([
