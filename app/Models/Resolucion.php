@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-// #[ObservedBy([ResolucionObserver::class])]
+#[ObservedBy([ResolucionObserver::class])]
 class Resolucion extends Model
 {
     use HasFactory;
