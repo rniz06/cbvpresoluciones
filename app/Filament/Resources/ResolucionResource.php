@@ -40,7 +40,6 @@ class ResolucionResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
                         Forms\Components\DatePicker::make('fecha')->label('Fecha')->required()->format('Y-m-d'),
-                        Forms\Components\TextInput::make('ano')->label('Año')->required()->numeric(),
                         Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
 
                         Forms\Components\Select::make('fuente_origen_id')
@@ -75,7 +74,7 @@ class ResolucionResource extends Resource
                             ->default('resoluciones'),
                         Forms\Components\Hidden::make('upload_directory_origen')
                             ->default('directorio'),
-                    ])->columns(3),
+                    ])->columns(2),
 
                 Forms\Components\Section::make('')
                     ->schema([
@@ -93,7 +92,7 @@ class ResolucionResource extends Resource
                             ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
                             ->maxSize(20480)
-                            ->required()
+                            ->required(fn ($context) => $context === 'create') // Solo requerido en la creación
                             ->previewable(true)
                             ->uploadingMessage('Subiendo archivo adjunto...')
                             ->columnSpan(3),

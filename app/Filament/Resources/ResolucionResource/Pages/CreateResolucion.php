@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ResolucionResource\Pages;
 
 use App\Filament\Resources\ResolucionResource;
+use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,9 @@ class CreateResolucion extends CreateRecord
         $data['archivo_tipo'] = Storage::disk('public')->mimeType($data['ruta_archivo']);
 
         $data['archivo_tamano'] = Storage::disk('public')->size($data['ruta_archivo']);
+
+        // Extraer el año de la fecha
+        $data['ano'] = Carbon::parse($data['fecha'])->year;
 
         return $data;
     }
