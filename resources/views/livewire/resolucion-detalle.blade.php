@@ -54,41 +54,29 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
                 <div class="bg-white rounded-lg p-4">
                     <h5 class="text-lg font-semibold mb-4">Compañías Afectadas</h5>
-                    <ul class="list-disc pl-5">
-                        {{-- @if ($companiasAfectadas->isEmpty())
-                            <p class="text-gray-500">No hay compañías afectadas.</p>
-                        @else
-                            <ul>
-                                @foreach ($companiasAfectadas as $compania)
-                                    <li>{{ $compania->compania }}</li>
-                                @endforeach
-                            </ul>
-                        @endif --}}
-                        <li>K-15</li>
-                        <li>K-15</li>
-                        <li>K-15</li>
-                        <li>K-15</li>
-                        <li>K-15</li>
-                    </ul>
+                    @if ($companias->isEmpty())
+                        <p class="text-gray-500">No hay compañías afectadas...</p>
+                    @else
+                        <ul class="list-disc pl-5">
+                            @foreach ($companias as $compania)
+                                <li>{{ $compania->compania }} - {{ $compania->compania_departamento }} - {{ $compania->compania_ciudad}} </li>
+                            @endforeach
+                        </ul>
+                        {{ $companias->appends(['personal_page' => request('personal_page')])->links() }}
+                    @endif
                 </div>
                 <div class="bg-white rounded-lg p-4">
                     <h5 class="text-lg font-semibold mb-4">Personal Afectado</h5>
-                    <ul class="list-disc pl-5">
-                        {{-- @if ($companiasAfectadas->isEmpty())
-                            <p class="text-gray-500">No hay compañías afectadas.</p>
+                        @if ($personales->isEmpty())
+                            <p class="text-gray-500">No hay personal afectadas...</p>
                         @else
-                            <ul>
-                                @foreach ($companiasAfectadas as $compania)
-                                    <li>{{ $compania }}</li>
+                            <ul class="list-disc pl-5">
+                                @foreach ($personales as $personal)
+                                    <li>{{ $personal->nombre_completo }} - {{ $personal->codigo }} - {{ $personal->categoria }}</li>
                                 @endforeach
                             </ul>
-                        @endif --}}
-                        <li>Ronald Niz</li>
-                        <li>Ronald Niz</li>
-                        <li>Ronald Niz</li>
-                        <li>Ronald Niz</li>
-                        <li>Ronald Niz</li>
-                    </ul>
+                            {{ $personales->appends(['page' => request('page')])->links() }}
+                        @endif
                 </div>
             </div>
         </div>
