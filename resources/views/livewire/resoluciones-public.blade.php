@@ -27,19 +27,21 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 ">
                                 <option value="">Seleccionar...</option>
                                 @foreach ($origenes as $origen)
-                                    <option value="{{ $origen->id }}">{{ $origen->origen}}</option>
+                                    <option value="{{ $origen->id }}">{{ $origen->origen }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="flex space-x-3 items-center">
                             <label class="w-40 text-sm font-medium text-gray-900">Fecha Desde :</label>
-                            <input type="date" wire:model.live="fechaDesde" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1">
+                            <input type="date" wire:model.live="fechaDesde"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1">
                         </div>
 
                         <div class="flex space-x-3 items-center">
                             <label class="w-40 text-sm font-medium text-gray-900">Fecha Hasta :</label>
-                            <input type="date" wire:model.live="fechaHasta" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1">
+                            <input type="date" wire:model.live="fechaHasta"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1">
                         </div>
 
                         <div class="flex space-x-3 items-center">
@@ -82,29 +84,35 @@
                         </thead>
                         <tbody>
                             @forelse ($resoluciones as $resolucion)
-                                <tr class="border-b dark:border-gray-700">
+                                <tr class="border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                                    onclick="window.location='{{ route('resolucion.detalle', $resolucion->id_resolucion) }}'">
                                     <th scope="row"
                                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ $resolucion->n_resolucion }}</th>
+                                        {{ $resolucion->n_resolucion }}
+                                    </th>
                                     <td class="px-4 py-3">{{ $resolucion->concepto }}</td>
                                     <td class="px-4 py-3">
-                                        {{ date('d/m/Y', strtotime($resolucion->fecha)) }}</td>
+                                        {{ date('d/m/Y', strtotime($resolucion->fecha)) }}
+                                    </td>
                                     <td class="px-4 py-3">{{ $resolucion->ano }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->fuente_origen }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->tipo_documento }}</td>
-                                    {{-- <td class="px-4 py-3">updated_at</td> --}}
                                     <td class="px-4 py-3 flex items-center justify-end">
-                                        <a href="{{route('descargar.resolucion', $resolucion->id_resolucion)}}" style="background-color: #FEDD00" class="px-3 py-1 text-white rounded"><i class="fas fa-download"></i></a>
+                                        <a href="{{ route('descargar.resolucion', $resolucion->id_resolucion) }}"
+                                            style="background-color: #FEDD00" class="px-3 py-1 text-white rounded">
+                                            <i class="fas fa-download"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-3">
+                                    <td colspan="7" class="text-center py-3">
                                         <p class="text-gray-500 italic">Sin registros coincidentes...</p>
                                     </td>
                                 </tr>
                             @endforelse
                         </tbody>
+
                     </table>
                 </div>
 
@@ -121,7 +129,7 @@
                             </select>
                         </div>
                     </div>
-                    {{ $resoluciones->links()}}
+                    {{ $resoluciones->links() }}
                 </div>
             </div>
         </div>

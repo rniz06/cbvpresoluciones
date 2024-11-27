@@ -189,7 +189,7 @@ class ResolucionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->paginated([10, 20, 30, 40, 50]);
     }
 
     public static function getEloquentQuery(): Builder

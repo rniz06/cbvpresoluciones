@@ -11,6 +11,8 @@ class ResolucionView extends Model
 
     protected $table = 'vista_resoluciones';
 
+    protected $primaryKey = 'id_resolucion';
+
     public $timestamps = false;
 
     public function scopeBuscar($query, $value)
