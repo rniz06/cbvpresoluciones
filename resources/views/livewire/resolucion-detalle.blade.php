@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <!-- Start coding here -->
             <div class="flex justify-end mb-4">
-                <a href="{{url('/')}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-download"></i> Volver</a>
+                <a href="{{url('/')}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-reply-all"></i> Volver</a>
                 <a href="{{route('descargar.resolucion', $resolucionView->id_resolucion)}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-file-pdf"></i> Descargar</a>            
             </div>
 
