@@ -98,10 +98,15 @@
                                     <td class="px-4 py-3">{{ $resolucion->fuente_origen }}</td>
                                     <td class="px-4 py-3">{{ $resolucion->tipo_documento }}</td>
                                     <td class="px-4 py-3 flex items-center justify-end">
+                                        <a href="{{ route('resolucion.detalle', $resolucion->id_resolucion) }}"
+                                             class="px-3 py-1 text-white rounded mr-2 bg-slate-500">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
                                         <a href="{{ route('descargar.resolucion', $resolucion->id_resolucion) }}"
                                             style="background-color: #FEDD00" class="px-3 py-1 text-white rounded">
                                             <i class="fas fa-download"></i>
-                                        </a>
+                                        </a>                                        
                                     </td>
                                 </tr>
                             @empty

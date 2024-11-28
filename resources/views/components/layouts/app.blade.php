@@ -16,7 +16,7 @@
         <div class="container mx-auto px-4 flex items-center justify-between">
             <div class="flex items-center">
                 <img src="{{ asset('img/cbvp-logo-png.webp') }}" alt="CBVP Logo" class="h-8 mr-4">
-                <span class="text-gray-800 font-bold text-xl">CBVP | Resoluciones</span>
+                <a href="{{url('/')}}" class="text-gray-800 font-bold text-xl">CBVP | Resoluciones</a>
             </div>
             <nav>
                 <ul class="flex space-x-4">
