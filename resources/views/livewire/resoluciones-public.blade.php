@@ -90,7 +90,10 @@
                                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $resolucion->n_resolucion }}
                                     </th>
-                                    <td class="px-4 py-3">{{ $resolucion->concepto }}</td>
+                                    {{-- <td class="px-4 py-3">{{ $resolucion->concepto }}</td> --}}
+                                    <td class="px-4 py-3 max-w-xs truncate overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {{ Str::of($resolucion->concepto)->limit(150) }}
+                                    </td>                                    
                                     <td class="px-4 py-3">
                                         {{ date('d/m/Y', strtotime($resolucion->fecha)) }}
                                     </td>

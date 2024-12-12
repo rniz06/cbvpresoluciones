@@ -59,6 +59,9 @@ class DashboardPanelProvider extends PanelProvider
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ])
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->brandLogo(asset('img/cbvp-logo-png.webp'))
+            ->brandLogoHeight('3rem')
+            ->favicon(asset('img/cbvp-logo-png.webp'));
     }
 }

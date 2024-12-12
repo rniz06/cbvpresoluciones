@@ -93,6 +93,7 @@ class ResolucionResource extends Resource
                             ->storeFileNamesIn('nombre_original')
                             ->maxSize(20480)
                             ->required(fn ($context) => $context === 'create') // Solo requerido en la creación
+                            ->hiddenOn('edit')
                             ->previewable(true)
                             ->uploadingMessage('Subiendo archivo adjunto...')
                             ->columnSpan(3),
@@ -177,7 +178,7 @@ class ResolucionResource extends Resource
                     ->multiple(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make()->label('Editar'),
+                Tables\Actions\EditAction::make()->label('Editar'),
                 Tables\Actions\ViewAction::make()->label('Ver'),
                 Action::make('descargar')
                     ->label('Descargar')
@@ -212,7 +213,7 @@ class ResolucionResource extends Resource
             'index' => Pages\ListResolucions::route('/'),
             'create' => Pages\CreateResolucion::route('/create'),
             'view' => Pages\ViewResolucion::route('/{record}'),
-            // 'edit' => Pages\EditResolucion::route('/{record}/edit'),
+            'edit' => Pages\EditResolucion::route('/{record}/edit'),
         ];
     }
 }

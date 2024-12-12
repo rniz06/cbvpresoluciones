@@ -18,4 +18,9 @@ class EditResolucion extends EditRecord
             // Actions\DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return ResolucionResource::getUrl('index');
+    }
 }
