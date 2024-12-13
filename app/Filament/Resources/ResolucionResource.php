@@ -39,6 +39,7 @@ class ResolucionResource extends Resource
                 Forms\Components\Section::make('')
                     ->schema([
                         Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
+                        Forms\Components\TextInput::make('nro_acta')->label('N° Acta')->numeric()->required(),
                         Forms\Components\DatePicker::make('fecha')->label('Fecha')->required()->format('Y-m-d'),
                         Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
 
@@ -74,7 +75,7 @@ class ResolucionResource extends Resource
                             ->default('resoluciones'),
                         Forms\Components\Hidden::make('upload_directory_origen')
                             ->default('directorio'),
-                    ])->columns(2),
+                    ])->columns(3),
 
                 Forms\Components\Section::make('')
                     ->schema([
@@ -123,6 +124,7 @@ class ResolucionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('n_resolucion')->label('N° Resolución')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('nro_acta')->label('N° Acta')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('concepto')->label('Concepto')->limit(50),
                 Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('ano')->label('Año')->searchable()->sortable(),
@@ -196,7 +198,7 @@ class ResolucionResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
+            ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
             ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
     }
 

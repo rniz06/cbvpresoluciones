@@ -19,6 +19,7 @@ class Resolucion extends Model
 
     protected $fillable = [
         'n_resolucion',
+        'nro_acta',
         'concepto',
         'fecha',
         'ano',

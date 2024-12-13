@@ -2,7 +2,7 @@
     <section class="mt-10">
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <!-- Start coding here -->
-            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mb-4">
                 <div class="flex items-center justify-between d p-4">
                     <div class="flex">
                         <div class="relative w-full">
@@ -71,6 +71,7 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-4 py-3">N° Resolución:</th>
+                                <th scope="col" class="px-4 py-3">N° Acta:</th>
                                 <th scope="col" class="px-4 py-3">Concepto:</th>
                                 <th scope="col" class="px-4 py-3">Fecha:</th>
                                 <th scope="col" class="px-4 py-3">Año:</th>
@@ -90,10 +91,11 @@
                                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $resolucion->n_resolucion }}
                                     </th>
+                                    <td class="px-4 py-3">{{ $resolucion->nro_acta ?? 'N/A' }}</td>
                                     {{-- <td class="px-4 py-3">{{ $resolucion->concepto }}</td> --}}
                                     <td class="px-4 py-3 max-w-xs truncate overflow-hidden text-ellipsis whitespace-nowrap">
                                         {{ Str::of($resolucion->concepto)->limit(150) }}
-                                    </td>                                    
+                                    </td>
                                     <td class="px-4 py-3">
                                         {{ date('d/m/Y', strtotime($resolucion->fecha)) }}
                                     </td>
@@ -109,7 +111,7 @@
                                         <a href="{{ route('descargar.resolucion', $resolucion->id_resolucion) }}"
                                             style="background-color: #FEDD00" class="px-3 py-1 text-white rounded">
                                             <i class="fas fa-download"></i>
-                                        </a>                                        
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

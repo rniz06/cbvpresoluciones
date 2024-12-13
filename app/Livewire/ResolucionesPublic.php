@@ -35,7 +35,7 @@ class ResolucionesPublic extends Component
         //
         $origenes = FuenteOrigen::select('id', 'origen')->get();
 
-        $resoluciones = ResolucionView::select('id_resolucion', 'n_resolucion', 'concepto', 'fecha', 'ano', 'fuente_origen', 'tipo_documento', 'fuente_origen_id', 'tipo_documento_id')
+        $resoluciones = ResolucionView::select('id_resolucion', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'fuente_origen', 'tipo_documento', 'fuente_origen_id', 'tipo_documento_id')
         // ->with(['tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
         ->buscar($this->buscar)
         ->when($this->anosFilter !== '', function($query){

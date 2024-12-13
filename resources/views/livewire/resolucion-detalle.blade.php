@@ -4,7 +4,7 @@
             <!-- Start coding here -->
             <div class="flex justify-end mb-4">
                 <a href="{{url('/')}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-reply-all"></i> Volver</a>
-                <a href="{{route('descargar.resolucion', $resolucionView->id_resolucion)}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-file-pdf"></i> Descargar</a>            
+                <a href="{{route('descargar.resolucion', $resolucionView->id_resolucion)}}" class="text-black bg-white hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"><i class="fas fa-file-pdf"></i> Descargar</a>
             </div>
 
             <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 mb-4">
@@ -17,6 +17,10 @@
                     <div class="flex items-center">
                         <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">N° Resolución:</h5>
                         <p class="text-gray-900 dark:text-gray-100">{{ $resolucionView->n_resolucion }}</p>
+                    </div>
+                    <div class="flex items-center">
+                        <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">N° Acta:</h5>
+                        <p class="text-gray-900 dark:text-gray-100">{{ $resolucionView->nro_acta ?? 'N/A' }}</p>
                     </div>
                     <div class="flex items-center">
                         <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Fecha:</h5>
