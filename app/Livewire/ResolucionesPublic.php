@@ -60,6 +60,7 @@ class ResolucionesPublic extends Component
         // ->when($this->fechaDesde && $this->fechaHasta, function ($query) {
         //     $query->whereBetween('fecha', [$this->fechaDesde, $this->fechaHasta]);
         // })
+        ->orderBy('fecha', 'desc')
         ->paginate($this->paginado);
 
         return view('livewire.resoluciones-public', [

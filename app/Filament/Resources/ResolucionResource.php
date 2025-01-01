@@ -93,7 +93,7 @@ class ResolucionResource extends Resource
                             ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
                             ->maxSize(20480)
-                            ->required(fn ($context) => $context === 'create') // Solo requerido en la creación
+                            ->required(fn($context) => $context === 'create') // Solo requerido en la creación
                             ->hiddenOn('edit')
                             ->previewable(true)
                             ->uploadingMessage('Subiendo archivo adjunto...')
@@ -155,6 +155,28 @@ class ResolucionResource extends Resource
                             fn(Builder $query, $n_resolucion): Builder => $query->where('n_resolucion', 'like', "%{$n_resolucion}%")
                         );
                     }),
+                Tables\Filters\Filter::make('nro_acta')
+                    ->form([
+                        Forms\Components\TextInput::make('nro_acta')->label('N° Acta:'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['nro_acta'],
+                            fn(Builder $query, $nro_acta): Builder => $query->where('nro_acta', 'like', "%{$nro_acta}%")
+                        );
+                    }),
+                // FILTRAR POR CAMPO (RELACION) FUENTEORIGEN
+                Tables\Filters\SelectFilter::make('fuente_origen_id')
+                    ->label('Origen:')
+                    ->relationship('fuenteOrigen', 'origen', fn(Builder $query) => $query->orderBy('origen', 'asc'))
+                    ->preload()
+                    ->multiple(),
+                // FILTRAR POR CAMPO (RELACION) TIPODOCUMENTO
+                Tables\Filters\SelectFilter::make('tipo_documento_id')
+                    ->label('Tipo:')
+                    ->relationship('tipoDocumento', 'tipo', fn(Builder $query) => $query->orderBy('tipo', 'asc'))
+                    ->preload()
+                    ->multiple(),
                 Tables\Filters\Filter::make('fecha')
                     ->form([
                         Forms\Components\DatePicker::make('fecha_desde')->label('Fecha desde'),
@@ -178,7 +200,7 @@ class ResolucionResource extends Resource
                         return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
                     })
                     ->multiple(),
-            ])
+            ])->filtersFormColumns(2)
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
                 Tables\Actions\ViewAction::make()->label('Ver'),
@@ -192,14 +214,17 @@ class ResolucionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])->paginated([10, 20, 30, 40, 50]);
+            ])
+            ->paginated([5, 10, 15, 20, 25])
+            ->defaultPaginationPageOption(5);
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
-            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
+            ->orderBY('fecha', 'desc');
     }
 
     public static function getRelations(): array
