@@ -103,13 +103,13 @@ class ResolucionResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Select::make('compania_id')
-                            ->label('Compañias')
+                            ->label('Compañias:')
                             ->options(Compania::getSelectOptions())
                             ->multiple()
                             ->searchable()
                             ->preload(),
                         Forms\Components\Select::make('personal_id')
-                            ->label('Personales')
+                            ->label('Personas:')
                             ->multiple()
                             ->options(Personal::getSelectOptions())
                             ->searchable()
