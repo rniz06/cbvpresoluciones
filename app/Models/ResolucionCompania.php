@@ -7,21 +7,18 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoDocumento extends Model implements Auditable
+class ResolucionCompania extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
 
-    protected $table = "tipo_documentos";
+    protected $table = "resoluciones_companias";
+
+    protected $primaryKey = 'id_resolucion_compania';
 
     protected $fillable = [
-        'tipo',
+        'resolucion_id',
+        'compania_id',
     ];
-
-    // Relacion uno a muchos inversa con la tabla de barrios
-    public function resoluciones()
-    {
-        return $this->hasMany(Resolucion::class);
-    }
 }
