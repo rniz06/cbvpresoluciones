@@ -7,6 +7,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Resolucion\Archivo;
+use App\Models\Resolucion\Estado;
 use App\Observers\ResolucionObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,7 @@ class Resolucion extends Model implements Auditable
         'personal_id',
         'fuente_origen_id',
         'tipo_documento_id',
+        'estado_id',
     ];
 
     /**
@@ -58,6 +60,12 @@ class Resolucion extends Model implements Auditable
     public function tipoDocumento()
     {
         return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
+    }
+
+    // Relacion uno a muchos con la tabla "resoluciones_estados" a travez del campo "estado_id"
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class, 'estado_id');
     }
 
     public function personales(): BelongsToMany

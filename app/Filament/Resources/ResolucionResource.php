@@ -10,6 +10,7 @@ use App\Models\Compania;
 use App\Models\FuenteOrigen;
 use App\Models\Personal;
 use App\Models\Resolucion;
+use App\Models\Resolucion\Estado as ResolucionEstado;
 use App\Models\TipoDocumento;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -57,7 +58,7 @@ class ResolucionResource extends Resource
                             }),
 
                         Forms\Components\Select::make('tipo_documento_id')
-                            ->label('Tipo Documento')
+                            ->label('Tipo Documento:')
                             ->options(TipoDocumento::all()->pluck('tipo', 'id'))
                             ->preload()
                             ->required()
@@ -69,6 +70,12 @@ class ResolucionResource extends Resource
                                     $set('upload_directory_tipo', $directorio);
                                 }
                             }),
+
+                        Forms\Components\Select::make('estado_id')
+                            ->label('Estado:')
+                            ->options(ResolucionEstado::all()->pluck('estado', 'id_resolucion_estado'))
+                            ->preload()
+                            ->required(),
 
                         // Campos ocultos para almacenar las partes del directorio
                         Forms\Components\Hidden::make('upload_directory_tipo')
@@ -132,6 +139,13 @@ class ResolucionResource extends Resource
 
                 Tables\Columns\TextColumn::make('fuenteOrigen.origen')->label('Origen')->searchable()->sortable()->badge()->color('gray'),
                 Tables\Columns\TextColumn::make('tipoDocumento.tipo')->label('Tipo')->searchable()->sortable()->badge(),
+                Tables\Columns\TextColumn::make('estado.estado')->label('Estado')->searchable()->sortable()->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'Vigente' => 'success',
+                    'Modificada' => 'gray', 
+                    'Derogada' => 'danger',
+                    default => 'gray'
+                }),
 
                 Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
                     ->label('Compañías')
@@ -222,8 +236,8 @@ class ResolucionResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
-            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen'])
+            ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id', 'estado_id')
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado'])
             ->orderBY('fecha', 'desc');
     }
 
