@@ -140,12 +140,12 @@ class ResolucionResource extends Resource
                 Tables\Columns\TextColumn::make('fuenteOrigen.origen')->label('Origen')->searchable()->sortable()->badge()->color('gray'),
                 Tables\Columns\TextColumn::make('tipoDocumento.tipo')->label('Tipo')->searchable()->sortable()->badge(),
                 Tables\Columns\TextColumn::make('estado.estado')->label('Estado')->searchable()->sortable()->badge()
-                ->color(fn (string $state): string => match ($state) {
-                    'Vigente' => 'success',
-                    'Modificada' => 'gray', 
-                    'Derogada' => 'danger',
-                    default => 'gray'
-                }),
+                    ->color(fn(string $state): string => match ($state) {
+                        'Vigente' => 'success',
+                        'Modificada' => 'gray',
+                        'Derogada' => 'danger',
+                        default => 'gray'
+                    }),
 
                 Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
                     ->label('Compañías')
@@ -214,6 +214,11 @@ class ResolucionResource extends Resource
                         return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
                     })
                     ->multiple(),
+                // FILTRAR POR CAMPO (RELACION) ESTADO
+                Tables\Filters\SelectFilter::make('estado_id')
+                    ->label('Estado:')
+                    ->relationship('estado', 'estado')
+                    ->preload(),
             ])->filtersFormColumns(2)
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
