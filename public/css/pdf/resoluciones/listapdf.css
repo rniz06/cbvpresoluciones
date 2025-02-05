@@ -1,0 +1,205 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #000;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    min-height: 100vh;
+}
+
+/* Estilos del encabezado */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 18px;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.header p {
+    font-size: 12px;
+    margin: 3px 0;
+    line-height: 1.4;
+}
+
+/* Estilos de sección */
+.section {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.section h2 {
+    font-size: 16px;
+    background-color: #ddd;
+    padding: 8px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Estilos de tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top: 10px;
+}
+
+.table thead tr {
+    background-color: #f5f5f5;
+}
+
+.table th {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #000;
+    font-size: 12px;
+    background-color: #f0f0f0;
+}
+
+.table td {
+    padding: 6px;
+    border: 1px solid #000;
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    vertical-align: middle;
+}
+
+/* Anchos específicos de columnas */
+.table th:nth-child(1),
+.table td:nth-child(1) { /* N° Resolución */
+    width: 12%;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) { /* N° Acta */
+    width: 8%;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) { /* Concepto */
+    width: 35%;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) { /* Fecha */
+    width: 12%;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) { /* Tipo */
+    width: 15%;
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) { /* Origen */
+    width: 12%;
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) { /* Ver */
+    width: 5%;
+}
+
+/* Utilidades */
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+/* Estilos para texto vacío */
+.empty-message {
+    text-align: center;
+    font-style: italic;
+    padding: 20px;
+    color: #666;
+}
+
+/* Estilos de impresión */
+@media print {
+    body {
+        border: none;
+    }
+
+    .container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .table {
+        page-break-inside: auto;
+    }
+    
+    .table tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    .header {
+        margin-bottom: 15px;
+    }
+
+    .section h2 {
+        background-color: #ddd !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .table th {
+        background-color: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* Estilos responsivos */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 5px;
+    }
+
+    .header h1 {
+        font-size: 16px;
+    }
+
+    .header p {
+        font-size: 11px;
+    }
+
+    .section h2 {
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        font-size: 11px;
+        padding: 4px;
+    }
+}
