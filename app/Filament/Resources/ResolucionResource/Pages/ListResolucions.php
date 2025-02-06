@@ -38,7 +38,7 @@ class ListResolucions extends ListRecords
                         ->when(
                             $data['fecha_hasta'],
                             fn(Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date)
-                        )->get();
+                        )->orderBy('n_resolucion', 'asc')->get();
 
                     $pdf = Pdf::loadView('resoluciones.pdf.lista-resoluciones', [
                         'resoluciones' => $resoluciones,
