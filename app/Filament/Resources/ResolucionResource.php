@@ -211,7 +211,7 @@ class ResolucionResource extends Resource
                     ->label('Año')
                     ->options(function () {
                         // Asumiendo que tienes una columna 'ano' en tu tabla
-                        return \App\Models\Resolucion::distinct()->pluck('ano', 'ano')->toArray();
+                        return \App\Models\Resolucion::distinct()->orderBy('ano', 'desc')->pluck('ano', 'ano')->toArray();
                     })
                     ->multiple(),
                 // FILTRAR POR CAMPO (RELACION) ESTADO
@@ -235,15 +235,16 @@ class ResolucionResource extends Resource
                 ]),
             ])
             ->paginated([5, 10, 15, 20, 25])
-            ->defaultPaginationPageOption(5);
+            ->defaultPaginationPageOption(5)
+            ->defaultSort('ano', 'desc');
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id', 'estado_id')
-            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado'])
-            ->orderBY('fecha', 'desc');
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado']);
+            //->orderBY('ano', 'desc')->orderBy('n_resolucion', 'desc');
     }
 
     public static function getRelations(): array
