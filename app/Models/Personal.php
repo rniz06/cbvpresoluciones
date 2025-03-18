@@ -17,6 +17,16 @@ class Personal extends Model
 
     protected $primaryKey = 'idpersonal';
 
+    public function resoluciones()
+    {
+        return $this->belongsToMany(
+            Resolucion::class,
+            'cbvp_resoluciones_db.resoluciones_personales', // Tabla intermedia
+            'personal_id', // Clave foránea en la tabla intermedia
+            'resolucion_id' // Clave foránea en la tabla intermedia
+        )->using(ResolucionPersonal::class);
+    }
+
     public static function getSelectOptions()
     {
         return Personal::selectRaw('idpersonal AS id, CONCAT(nombrecompleto, \' - \', codigo, \' - \', categoria) AS label')

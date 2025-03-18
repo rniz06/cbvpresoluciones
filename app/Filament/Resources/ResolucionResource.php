@@ -20,6 +20,7 @@ use Filament\Tables;
 use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
@@ -117,10 +118,14 @@ class ResolucionResource extends Resource
                             ->preload(),
                         Forms\Components\Select::make('personal_id')
                             ->label('Personas:')
+                            ->relationship(
+                                name: 'personales',
+                                modifyQueryUsing: fn (Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'),
+                            )
+                            ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
                             ->multiple()
-                            ->options(Personal::getSelectOptions())
-                            ->searchable()
-                            ->preload()
+                            ->searchable(['nombrecompleto', 'codigo', 'categoria'])
+                            ->optionsLimit(10)
                     ])->columns(2)
 
             ]);

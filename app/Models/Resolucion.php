@@ -68,9 +68,14 @@ class Resolucion extends Model implements Auditable
         return $this->belongsTo(Estado::class, 'estado_id');
     }
 
-    public function personales(): BelongsToMany
+    public function personales()
     {
-        return $this->belongsToMany(Personal::class);
+        return $this->belongsToMany(
+            Personal::class,
+            'cbvp_resoluciones_db.resoluciones_personales', // Tabla intermedia
+            'resolucion_id', // Clave foránea en la tabla intermedia
+            'personal_id' // Clave foránea en la tabla intermedia
+        )->using(ResolucionPersonal::class);
     }
 
     public function companias(): BelongsToMany

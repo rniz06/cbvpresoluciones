@@ -35,17 +35,17 @@ class ResolucionObserver
         }
 
         // verificamos la existencia de datos en la variable personales
-        if ($personales) {
-            // Luego, insertamos en la tabla pivote
-            foreach ($personales as $personal_id) {
-                DB::table('resoluciones_personales')->insert([
-                    'resolucion_id' => $resolucion_id,  // ID de la resolución guardada
-                    'personal_id'   => $personal_id,      // ID de la compañía
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
-                ]);
-            }
-        }
+        // if ($personales) {
+        //     // Luego, insertamos en la tabla pivote
+        //     foreach ($personales as $personal_id) {
+        //         DB::table('resoluciones_personales')->insert([
+        //             'resolucion_id' => $resolucion_id,  // ID de la resolución guardada
+        //             'personal_id'   => $personal_id,      // ID de la compañía
+        //             'created_at'    => now(),
+        //             'updated_at'    => now(),
+        //         ]);
+        //     }
+        // }
     }
 
     /**
@@ -58,9 +58,9 @@ class ResolucionObserver
             ->where('resolucion_id', $resolucion->id)
             ->delete();
 
-        DB::table('resoluciones_personales')
-            ->where('resolucion_id', $resolucion->id)
-            ->delete();
+        // DB::table('resoluciones_personales')
+        //     ->where('resolucion_id', $resolucion->id)
+        //     ->delete();
 
         // Luego, inserta los nuevos registros (igual que en el método created)
         $companias = $resolucion->compania_id;
@@ -75,17 +75,17 @@ class ResolucionObserver
             }
         }
 
-        $personales = $resolucion->personal_id;
-        if ($personales) {
-            foreach ($personales as $personal_id) {
-                DB::table('resoluciones_personales')->insert([
-                    'resolucion_id' => $resolucion->id,
-                    'personal_id'   => $personal_id,
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
-                ]);
-            }
-        }
+        // $personales = $resolucion->personal_id;
+        // if ($personales) {
+        //     foreach ($personales as $personal_id) {
+        //         DB::table('resoluciones_personales')->insert([
+        //             'resolucion_id' => $resolucion->id,
+        //             'personal_id'   => $personal_id,
+        //             'created_at'    => now(),
+        //             'updated_at'    => now(),
+        //         ]);
+        //     }
+        // }
     }
 
     /**
