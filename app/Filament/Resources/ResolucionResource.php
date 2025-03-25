@@ -31,6 +31,8 @@ class ResolucionResource extends Resource
 
     protected static ?string $navigationLabel = 'Resoluciones';
 
+    protected static ?string $navigationGroup = 'Resoluciones';
+
     protected static ?string $navigationIcon = 'heroicon-o-folder-open';
 
     public static function form(Form $form): Form
