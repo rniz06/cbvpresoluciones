@@ -17,6 +17,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -122,9 +123,9 @@ class ResolucionResource extends Resource
                             ->label('Personas:')
                             ->relationship(
                                 name: 'personales',
-                                modifyQueryUsing: fn (Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'),
+                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'),
                             )
-                            ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
+                            ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
                             ->multiple()
                             ->searchable(['nombrecompleto', 'codigo', 'categoria'])
                             ->optionsLimit(10)
@@ -166,6 +167,16 @@ class ResolucionResource extends Resource
 
             ])
             ->filters([
+                Tables\Filters\Filter::make('concepto')
+                    ->form([
+                        Forms\Components\TextInput::make('concepto')->label('Concepto:'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['concepto'],
+                            fn(Builder $query, $concepto): Builder => $query->where('concepto', 'like', "%{$concepto}%")
+                        );
+                    }),
                 Tables\Filters\Filter::make('n_resolucion')
                     ->form([
                         Forms\Components\TextInput::make('n_resolucion')->label('N° Resolución'),
@@ -226,7 +237,7 @@ class ResolucionResource extends Resource
                     ->label('Estado:')
                     ->relationship('estado', 'estado')
                     ->preload(),
-            ])->filtersFormColumns(2)
+            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(4)
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
                 Tables\Actions\ViewAction::make()->label('Ver'),
@@ -251,7 +262,7 @@ class ResolucionResource extends Resource
         return parent::getEloquentQuery()
             ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id', 'estado_id')
             ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado']);
-            //->orderBY('ano', 'desc')->orderBy('n_resolucion', 'desc');
+        //->orderBY('ano', 'desc')->orderBy('n_resolucion', 'desc');
     }
 
     public static function getRelations(): array
