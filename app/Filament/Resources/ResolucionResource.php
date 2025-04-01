@@ -138,16 +138,16 @@ class ResolucionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('n_resolucion')->label('N° Resolución')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('nro_acta')->label('N° Acta')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('n_resolucion')->label('N° Resolución')->sortable(),
+                Tables\Columns\TextColumn::make('nro_acta')->label('N° Acta')->sortable(),
                 Tables\Columns\TextColumn::make('concepto')->label('Concepto')->limit(50),
-                Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('ano')->label('Año')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('fecha')->label('Fecha')->date()->sortable(),
+                Tables\Columns\TextColumn::make('ano')->label('Año')->sortable(),
+                // Tables\Columns\TextColumn::make('usuario.name')->label('Agregado por')->searchable()->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('fuenteOrigen.origen')->label('Origen')->searchable()->sortable()->badge()->color('gray'),
-                Tables\Columns\TextColumn::make('tipoDocumento.tipo')->label('Tipo')->searchable()->sortable()->badge(),
-                Tables\Columns\TextColumn::make('estado.estado')->label('Estado')->searchable()->sortable()->badge()
+                Tables\Columns\TextColumn::make('fuenteOrigen.origen')->label('Origen')->sortable()->badge()->color('gray'),
+                Tables\Columns\TextColumn::make('tipoDocumento.tipo')->label('Tipo')->sortable()->badge(),
+                Tables\Columns\TextColumn::make('estado.estado')->label('Estado')->sortable()->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'Vigente' => 'success',
                         'Modificada' => 'gray',
@@ -155,28 +155,18 @@ class ResolucionResource extends Resource
                         default => 'gray'
                     }),
 
-                Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
-                    ->label('Compañías')
-                    ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute())
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('getCompaniasNamesAttribute') // Usa el método que has definido
+                //     ->label('Compañías')
+                //     ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute())
+                //     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
-                    ->label('Personal')
-                    ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute())
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('getPersonalNamesAttribute') // Usa el método que has definido
+                //     ->label('Personal')
+                //     ->getStateUsing(fn($record) => $record->getPersonalNamesAttribute())
+                //     ->toggleable(isToggledHiddenByDefault: true),
 
             ])
             ->filters([
-                Tables\Filters\Filter::make('concepto')
-                    ->form([
-                        Forms\Components\TextInput::make('concepto')->label('Concepto:'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query->when(
-                            $data['concepto'],
-                            fn(Builder $query, $concepto): Builder => $query->where('concepto', 'like', "%{$concepto}%")
-                        );
-                    }),
                 Tables\Filters\Filter::make('n_resolucion')
                     ->form([
                         Forms\Components\TextInput::make('n_resolucion')->label('N° Resolución'),
@@ -197,6 +187,22 @@ class ResolucionResource extends Resource
                             fn(Builder $query, $nro_acta): Builder => $query->where('nro_acta', 'like', "%{$nro_acta}%")
                         );
                     }),
+                Tables\Filters\Filter::make('concepto')
+                    ->form([
+                        Forms\Components\TextInput::make('concepto')->label('Concepto:'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['concepto'],
+                            fn(Builder $query, $concepto): Builder => $query->where('concepto', 'like', "%{$concepto}%")
+                        );
+                    }),
+                Tables\Filters\SelectFilter::make('ano')
+                    ->label('Año')
+                    ->options(function () {
+                        return \App\Models\Resolucion::distinct()->orderBy('ano', 'desc')->pluck('ano', 'ano')->toArray();
+                    })
+                    ->multiple(),
                 // FILTRAR POR CAMPO (RELACION) FUENTEORIGEN
                 Tables\Filters\SelectFilter::make('fuente_origen_id')
                     ->label('Origen:')
@@ -209,6 +215,19 @@ class ResolucionResource extends Resource
                     ->relationship('tipoDocumento', 'tipo', fn(Builder $query) => $query->orderBy('tipo', 'asc'))
                     ->preload()
                     ->multiple(),
+                // FILTRAR POR CAMPO (RELACION) ESTADO
+                Tables\Filters\SelectFilter::make('estado_id')
+                    ->label('Estado:')
+                    ->relationship('estado', 'estado')
+                    ->preload(),
+                // FILTRAR POR CAMPO (RELACION) PERSONALES
+                Tables\Filters\SelectFilter::make('personales')
+                    ->label('Personas:')
+                    ->multiple()
+                    ->relationship('personales', 'nombrecompleto', fn(Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'))
+                    ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
+                    ->searchable(['nombrecompleto', 'codigo', 'categoria'])
+                    ->optionsLimit(10),
                 Tables\Filters\Filter::make('fecha')
                     ->form([
                         Forms\Components\DatePicker::make('fecha_desde')->label('Fecha desde'),
@@ -225,19 +244,8 @@ class ResolucionResource extends Resource
                                 fn(Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date)
                             );
                     }),
-                Tables\Filters\SelectFilter::make('ano')
-                    ->label('Año')
-                    ->options(function () {
-                        // Asumiendo que tienes una columna 'ano' en tu tabla
-                        return \App\Models\Resolucion::distinct()->orderBy('ano', 'desc')->pluck('ano', 'ano')->toArray();
-                    })
-                    ->multiple(),
-                // FILTRAR POR CAMPO (RELACION) ESTADO
-                Tables\Filters\SelectFilter::make('estado_id')
-                    ->label('Estado:')
-                    ->relationship('estado', 'estado')
-                    ->preload(),
-            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(4)
+                // , layout: FiltersLayout::AboveContent
+            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(5)
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
                 Tables\Actions\ViewAction::make()->label('Ver'),
@@ -261,7 +269,7 @@ class ResolucionResource extends Resource
     {
         return parent::getEloquentQuery()
             ->select('id', 'n_resolucion', 'nro_acta', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id', 'estado_id')
-            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado']);
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'estado', 'personales']);
         //->orderBY('ano', 'desc')->orderBy('n_resolucion', 'desc');
     }
 

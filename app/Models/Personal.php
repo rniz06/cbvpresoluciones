@@ -13,7 +13,7 @@ class Personal extends Model
 
     protected $connection = "db_personal";
 
-    protected $table = "vt_personales";
+    protected $table = "personalcbvp.vt_personales";
 
     protected $primaryKey = 'idpersonal';
 
