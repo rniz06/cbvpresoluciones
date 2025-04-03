@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ResolucionCompania extends Model implements Auditable
+class ResolucionCompania extends Pivot
 {
     use HasFactory;
-    use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
 
     protected $table = "resoluciones_companias";

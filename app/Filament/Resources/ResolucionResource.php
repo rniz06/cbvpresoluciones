@@ -113,12 +113,23 @@ class ResolucionResource extends Resource
 
                 Forms\Components\Section::make()
                     ->schema([
+                        // Forms\Components\Select::make('compania_id')
+                        //     ->label('Compañias:')
+                        //     ->options(Compania::getSelectOptions())
+                        //     ->multiple()
+                        //     ->searchable()
+                        //     ->preload(),
                         Forms\Components\Select::make('compania_id')
                             ->label('Compañias:')
-                            ->options(Compania::getSelectOptions())
+                            ->relationship(
+                                name: 'companias',
+                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('orden'),
+                            )
+                            ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->compania} - {$record->departamento} - {$record->ciudad}")
                             ->multiple()
-                            ->searchable()
-                            ->preload(),
+                            ->searchable(['compania', 'departamento', 'ciudad'])
+                            ->preload()
+                            ->optionsLimit(10),
                         Forms\Components\Select::make('personal_id')
                             ->label('Personas:')
                             ->relationship(
@@ -227,6 +238,15 @@ class ResolucionResource extends Resource
                     ->relationship('personales', 'nombrecompleto', fn(Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'))
                     ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
                     ->searchable(['nombrecompleto', 'codigo', 'categoria'])
+                    ->optionsLimit(10),
+                // FILTRAR POR CAMPO (RELACION) COMPANIAS
+                Tables\Filters\SelectFilter::make('companias')
+                    ->label('Compañias:')
+                    ->multiple()
+                    ->relationship('companias', 'compania', fn(Builder $query) => $query->orderBy('orden'))
+                    ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->compania} - {$record->departamento} - {$record->ciudad}")
+                    ->searchable(['compania', 'departamento', 'ciudad'])
+                    ->preload()
                     ->optionsLimit(10),
                 Tables\Filters\Filter::make('fecha')
                     ->form([

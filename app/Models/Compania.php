@@ -13,7 +13,7 @@ class Compania extends Model
 
     protected $connection = "db_companias";
 
-    protected $table = "vt_companias";
+    protected $table = "emepy_bd.vt_companias";
 
     protected $primaryKey = 'idcompanias';
 
@@ -27,11 +27,21 @@ class Compania extends Model
             ->pluck('label', 'id');
     }
 
-    /**
-     * The roles that belong to the user.
-     */
-    public function resoluciones(): BelongsToMany
+    public function resoluciones()
     {
-        return $this->belongsToMany(Resolucion::class, 'compania_resolucion');
+        return $this->belongsToMany(
+            Resolucion::class,
+            'cbvp_resoluciones_db.resoluciones_companias', // Tabla intermedia
+            'compania_id', // Clave foránea en la tabla intermedia
+            'resolucion_id' // Clave foránea en la tabla intermedia
+        )->using(ResolucionCompania::class);
     }
+
+    // /**
+    //  * The roles that belong to the user.
+    //  */
+    // public function resoluciones(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Resolucion::class, 'compania_resolucion');
+    // }
 }

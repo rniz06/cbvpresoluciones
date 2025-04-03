@@ -78,10 +78,20 @@ class Resolucion extends Model implements Auditable
         )->using(ResolucionPersonal::class);
     }
 
-    public function companias(): BelongsToMany
+    public function companias()
     {
-        return $this->belongsToMany(Compania::class);
+        return $this->belongsToMany(
+            Compania::class,
+            'cbvp_resoluciones_db.resoluciones_companias', // Tabla intermedia
+            'resolucion_id', // Clave foránea en la tabla intermedia
+            'compania_id' // Clave foránea en la tabla intermedia
+        )->using(ResolucionCompania::class);
     }
+
+    // public function companias(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Compania::class);
+    // }
 
     protected function casts(): array
     {

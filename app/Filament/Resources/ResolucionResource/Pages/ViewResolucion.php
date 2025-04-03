@@ -23,7 +23,7 @@ class ViewResolucion extends ViewRecord
             Action::make('descargar')
                 ->label('Descargar')
                 ->icon('heroicon-c-arrow-down-tray')
-                ->url(fn () => route('descargar.resolucion', $this->record))
+                ->url(fn() => route('descargar.resolucion', $this->record))
                 ->openUrlInNewTab(),
         ];
     }
@@ -32,7 +32,7 @@ class ViewResolucion extends ViewRecord
     {
         return parent::getEloquentQuery()
             ->select('id', 'n_resolucion', 'concepto', 'fecha', 'ano', 'usuario_id', 'compania_id', 'personal_id', 'tipo_documento_id', 'fuente_origen_id')
-            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen']);
+            ->with(['usuario:id,name', 'tipoDocumento:id,tipo', 'fuenteOrigen:id,origen', 'personales:idpersonal,nombrecompleto,codigo,categoria', 'companias']);
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -54,15 +54,19 @@ class ViewResolucion extends ViewRecord
 
                 Section::make('')
                     ->schema([
-                        TextEntry::make('getCompaniasNamesAttribute')->label('Compañias:')
-                            ->getStateUsing(fn($record) => $record->getCompaniasNamesAttribute())
-                            ->listWithLineBreaks()
-                            ->bulleted(),
+                        TextEntry::make('companias')->label('Compañias:')->listWithLineBreaks()->bulleted()->limitList(5)->expandableLimitedList()
+                        ->state(function ($record) {
+                            return $record->companias->map(function ($compania) {
+                                return "{$compania->compania} - {$compania->departamento} - {$compania->ciudad}";
+                            })->toArray();
+                        }),
 
-                        TextEntry::make('getPersonalView')->label('Personal:')
-                            ->getStateUsing(fn($record) => $record->getPersonalView())
-                            ->listWithLineBreaks()
-                            ->bulleted(),
+                        TextEntry::make('personales')->label('Personas:')->listWithLineBreaks()->bulleted()->limitList(5)->expandableLimitedList()
+                        ->state(function ($record) {
+                            return $record->personales->map(function ($personal) {
+                                return "{$personal->nombrecompleto} - {$personal->codigo} - {$personal->categoria}";
+                            })->toArray();
+                        })
                     ])->columns(),
             ]);
     }
