@@ -57,13 +57,26 @@ class ConvenioResource extends Resource
                         ->required(),
                     Forms\Components\DatePicker::make('fecha_suscrito')->reactive()->required(),
                     Forms\Components\DatePicker::make('fecha_fin')->minDate(fn(Get $get) => $get('fecha_suscrito'))->required(),
-                    Forms\Components\TextInput::make('presidente_id')->label('Presidente:')
+                    Forms\Components\Select::make('presidente_id')
+                        ->label('Presidente:')
+                        ->relationship(
+                            name: 'presidente',
+                            modifyQueryUsing: fn(Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'),
+                        )
                         ->default(ObtenerAutoridad::presidente())
-                        ->readOnly()
-                        ->required(),
-                    Forms\Components\TextInput::make('secretario_id')->label('Secretario/a:')
+                        ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
+                        ->searchable(['nombrecompleto', 'codigo', 'categoria'])
+                        ->optionsLimit(10),
+                    Forms\Components\Select::make('secretario_id')
+                        ->label('Secretario/a:')
+                        ->relationship(
+                            name: 'secretario',
+                            modifyQueryUsing: fn(Builder $query) => $query->orderBy('nombrecompleto')->orderBy('codigo')->orderBy('categoria'),
+                        )
                         ->default(ObtenerAutoridad::secretario())
-                        ->readOnly()->required(),
+                        ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->nombrecompleto} - {$record->codigo} - {$record->categoria}")
+                        ->searchable(['nombrecompleto', 'codigo', 'categoria'])
+                        ->optionsLimit(10),
                     Forms\Components\Select::make('personal_id')
                         ->label('Otro Representante:')
                         ->relationship(
@@ -75,7 +88,7 @@ class ConvenioResource extends Resource
                         ->optionsLimit(10),
                     Forms\Components\FileUpload::make('archivo')->label('Archivo Digital')
                         ->disk('public')
-                        ->directory(fn ($get) => 'convenios/' . ($get('fecha_suscrito') ? date('Y', strtotime($get('fecha_suscrito'))) : date('Y')))
+                        ->directory(fn($get) => 'convenios/' . ($get('fecha_suscrito') ? date('Y', strtotime($get('fecha_suscrito'))) : date('Y')))
                         //->directory(ArchivoDirectorio::archivodirectorio())
                         ->preserveFilenames()
                         ->storeFileNamesIn('archivo_nombre')
