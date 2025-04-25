@@ -48,7 +48,16 @@ class ConvenioResource extends Resource
                         ->preload()
                         ->searchable()
                         ->optionsLimit(10)
-                        ->required(),
+                        ->required()
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('nombre')->label('Institución:')->required()->maxLength(100),
+                            Forms\Components\TextInput::make('representante')->label('Representante:')->required()->maxLength(100),
+                            Forms\Components\TextInput::make('domicilio')->maxLength(100),
+                            Forms\Components\TextInput::make('correo')->email()->maxLength(40),
+                            Forms\Components\TextInput::make('telefono')->numeric(),
+                            Forms\Components\Select::make('ciudad_id')->relationship('ciudad', 'ciudad')->searchable(),
+                            Forms\Components\Select::make('pais_id')->relationship('pais', 'pais')->searchable(),
+                        ])->columns(3),
                     Forms\Components\Select::make('estado_id')->label('Estado:')
                         ->relationship('estado', 'estado')
                         ->preload()

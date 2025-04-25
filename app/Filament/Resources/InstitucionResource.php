@@ -37,13 +37,13 @@ class InstitucionResource extends Resource
         return $form
             ->schema([
                 Section::make([
-                    TextInput::make('nombre')->required()->label('Institución'),
-                    TextInput::make('domicilio'),
-                    TextInput::make('correo')->required(),
-                    TextInput::make('telefono')->required(),
-                    Select::make('ciudad_id')->relationship('ciudad', 'ciudad')->searchable(),
-                    Select::make('pais_id')->relationship('pais', 'pais')->searchable(),
-                    TextInput::make('representante')->required(),
+                    Forms\Components\TextInput::make('nombre')->label('Institución:')->required()->maxLength(100),
+                    Forms\Components\TextInput::make('representante')->label('Representante:')->required()->maxLength(100),
+                    Forms\Components\TextInput::make('domicilio')->maxLength(100),
+                    Forms\Components\TextInput::make('correo')->email()->maxLength(40),
+                    Forms\Components\TextInput::make('telefono')->numeric(),
+                    Forms\Components\Select::make('ciudad_id')->relationship('ciudad', 'ciudad')->searchable(),
+                    Forms\Components\Select::make('pais_id')->relationship('pais', 'pais')->searchable(),
                 ])->columns(2)
             ]);
     }
