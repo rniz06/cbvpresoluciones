@@ -103,7 +103,7 @@ class ResolucionResource extends Resource
                             // ->directory('resoluciones/' . date('Y') . '/' . date('m') . '/' . date('d'))
                             ->preserveFilenames()
                             ->storeFileNamesIn('nombre_original')
-                            ->maxSize(20480)
+                            ->maxSize(24576) // 24 MB
                             ->required(fn($context) => $context === 'create') // Solo requerido en la creación
                             ->hiddenOn('edit')
                             ->previewable(true)
