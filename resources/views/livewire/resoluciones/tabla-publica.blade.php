@@ -160,10 +160,10 @@
                                     <td>{{ $resolucion->fuenteOrigen->origen ?? 'S/D' }}</td>
                                     <td>{{ $resolucion->tipoDocumento->tipo ?? 'S/D' }}</td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-sm btn-secondary">
+                                        <a href="{{ route('resolucion.detalle', $resolucion->id) }}" class="btn btn-sm btn-secondary">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-warning">
+                                        <a href="{{ route('descargar.resolucion', $resolucion->id) }}" class="btn btn-sm btn-warning">
                                             <i class="fas fa-download"></i>
                                         </a>
                                     </td>
