@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Resolucion\Archivo;
 use App\Models\Resolucion\Estado;
 use App\Observers\ResolucionObserver;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -155,9 +156,63 @@ class Resolucion extends Model implements Auditable
         return $results;
     }
 
-    public function scopeBuscar($query, $value)
+    public function scopeBuscar(Builder $query, $value)
     {
-        $query->where('n_resolucion', 'like', "%{$value}%")
-        ->orWhere('concepto', 'like', "%{$value}%");
+        $query->when($value, function (Builder $query, string $value) {
+            $query->whereLike('n_resolucion', "%{$value}%")
+                ->orWhereLike('concepto', "%{$value}%")
+                ->orWhereLike('ano', "%{$value}%")
+                ->whereRelation('fuenteOrigen', 'origen', 'like', "%{$value}%")
+                ->orWhereRelation('tipoDocumento', 'tipo', 'like', "%{$value}%");
+        });
+    }
+
+    public function scopeBuscarNResolucion(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->whereLike('n_resolucion', "%{$value}%");
+        });
+    }
+
+    public function scopeBuscarNActa(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->whereLike('nro_acta', "%{$value}%");
+        });
+    }
+
+    public function scopeBuscarConcepto(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->whereLike('concepto', "%{$value}%");
+        });
+    }
+
+    public function scopeBuscarFecha(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->whereDate('fecha', $value);
+        });
+    }
+
+    public function scopeBuscarAnho(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->where('ano', $value);
+        });
+    }
+
+    public function scopeBuscarOrigenId(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->where('fuente_origen_id', $value);
+        });
+    }
+
+    public function scopeBuscarTipoId(Builder $query, $value)
+    {
+        $query->when($value, function (Builder $query, string $value) {
+            $query->where('tipo_documento_id', $value);
+        });
     }
 }

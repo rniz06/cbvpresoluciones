@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ConvenioController;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\ResolutionController;
 use App\Livewire\ResolucionDetalle;
+use App\Livewire\Resoluciones\TablaPublica;
 use App\Livewire\ResolucionesPublic;
 use Illuminate\Support\Facades\Route;
 
@@ -10,8 +12,9 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/', [InicioController::class, 'index'])->name('index');
 Route::get('/descargar-resolucion/{resolution}', [ResolutionController::class, 'download'])->name('descargar.resolucion');
-Route::get('/', ResolucionesPublic::class);
+// Route::get('/', ResolucionesPublic::class);
 Route::get('/resolucion/detalle/{resolucion}', ResolucionDetalle::class)->name('resolucion.detalle');
 
 Route::middleware('auth')->group(function () {
