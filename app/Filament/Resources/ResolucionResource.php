@@ -23,8 +23,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Get;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Illuminate\Validation\Rules\Unique;
 
 class ResolucionResource extends Resource
 {
@@ -43,7 +45,15 @@ class ResolucionResource extends Resource
                 // Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
                 Forms\Components\Section::make('')
                     ->schema([
-                        Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required(),
+                        Forms\Components\TextInput::make('n_resolucion')->label('N° Resolucion')->required()->unique(
+                            # n_resolucion UNICO SEGUN EL TIPO DE DOCUMENTO
+                            modifyRuleUsing: function (Unique $rule, Get $get) {
+                                return $rule->where(
+                                    'tipo_documento_id',
+                                    $get('tipo_documento_id')
+                                );
+                            }
+                        ),
                         Forms\Components\TextInput::make('nro_acta')->label('N° Acta')->numeric(),
                         Forms\Components\DatePicker::make('fecha')->label('Fecha')->required()->format('Y-m-d'),
                         Forms\Components\Hidden::make('usuario_id')->default(Auth::id()),
